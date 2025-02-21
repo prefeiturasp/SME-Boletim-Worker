@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.66" />
+    <PackageReference Include="Dommel" Version="3.3.4" />
+    <PackageReference Include="NEST" Version="7.17.5" />
+    <PackageReference Include="Npgsql" Version="9.0.2" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SME.SERAp.Boletim.Dominio\SME.SERAp.Boletim.Dominio.csproj" />
+    <ProjectReference Include="..\SME.SERAp.Boletim.Infra\SME.SERAp.Boletim.Infra.csproj" />
+  </ItemGroup>
+
+</Project>
