@@ -49,7 +49,6 @@ namespace SME.SERAp.Boletim.Worker
             ConfigurarRabbitmq(services);
             ConfigurarRabbitmqLog(services);
             ConfigurarTelemetria(services);
-            ConfigurarElasticSearch(services);
             ConfigurarCoresso(services);
             ConfigurarEol(services);
         }
@@ -86,7 +85,7 @@ namespace SME.SERAp.Boletim.Worker
             DapperExtensionMethods.Init(servicoTelemetria);
         }
 
-        private async Task ConfigurarRabbitmqLog(IServiceCollection services)
+        private void ConfigurarRabbitmqLog(IServiceCollection services)
         {
             var rabbitLogOptions = new RabbitLogOptions();
             Configuration.GetSection(RabbitLogOptions.Secao).Bind(rabbitLogOptions, c => c.BindNonPublicProperties = true);
@@ -100,43 +99,11 @@ namespace SME.SERAp.Boletim.Worker
                 VirtualHost = rabbitLogOptions.VirtualHost
             };
 
-            var conexaoRabbitLog = await factoryLog.CreateConnectionAsync();
-            IChannel channelLog = await conexaoRabbitLog.CreateChannelAsync();
+            var conexaoRabbitLog = factoryLog.CreateConnectionAsync().Result;
+            IChannel channelLog = conexaoRabbitLog.CreateChannelAsync().Result;
         }
 
-        private void ConfigurarElasticSearch(IServiceCollection services)
-        {
-            var elasticOptions = new ElasticOptions();
-            Configuration.GetSection(ElasticOptions.Secao).Bind(elasticOptions, c => c.BindNonPublicProperties = true);
-            services.AddSingleton(elasticOptions);
-
-            var nodes = new List<Uri>();
-            if (elasticOptions.Urls.Contains(','))
-            {
-                string[] urls = elasticOptions.Urls.Split(',');
-                foreach (string url in urls)
-                    nodes.Add(new Uri(url));
-            }
-            else
-            {
-                nodes.Add(new Uri(elasticOptions.Urls));
-            }
-
-            var connectionPool = new StaticConnectionPool(nodes);
-            var connectionSettings = new ConnectionSettings(connectionPool);
-            connectionSettings.DefaultIndex(elasticOptions.DefaultIndex);
-
-            if (!string.IsNullOrEmpty(elasticOptions.CertificateFingerprint))
-                connectionSettings.CertificateFingerprint(elasticOptions.CertificateFingerprint);
-
-            if (!string.IsNullOrEmpty(elasticOptions.Username) && !string.IsNullOrEmpty(elasticOptions.Password))
-                connectionSettings.BasicAuthentication(elasticOptions.Username, elasticOptions.Password);
-
-            var elasticClient = new ElasticClient(connectionSettings);
-            services.AddSingleton<IElasticClient>(elasticClient);
-        }
-
-        private async Task ConfigurarRabbitmq(IServiceCollection services)
+        private void ConfigurarRabbitmq(IServiceCollection services)
         {
             var rabbitOptions = new RabbitOptions();
             Configuration.GetSection(RabbitOptions.Secao).Bind(rabbitOptions, c => c.BindNonPublicProperties = true);
@@ -152,17 +119,21 @@ namespace SME.SERAp.Boletim.Worker
 
             services.AddSingleton(factory);
 
-            using var conexaoRabbit = await factory.CreateConnectionAsync();
-            using var channel = await conexaoRabbit.CreateChannelAsync();
-            services.AddSingleton(channel);
+            services.AddSingleton<RabbitMQ.Client.IConnection>(provider =>
+            {
+                var factory = provider.GetRequiredService<ConnectionFactory>();
+                return factory.CreateConnectionAsync().Result;
+            });
+
+            services.AddTransient<IChannel>(provider =>
+            {
+                var connection = provider.GetRequiredService<RabbitMQ.Client.IConnection>();
+                return connection.CreateChannelAsync().Result;
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseElasticApm(Configuration,
-              new SqlClientDiagnosticSubscriber(),
-              new HttpDiagnosticsSubscriber());
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

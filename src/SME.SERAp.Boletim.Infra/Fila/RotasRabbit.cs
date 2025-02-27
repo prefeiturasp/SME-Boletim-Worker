@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SME.SERAp.Boletim.Infra.Fila
+﻿namespace SME.SERAp.Boletim.Infra.Fila
 {
     public class RotasRabbit
     {
@@ -13,7 +7,8 @@ namespace SME.SERAp.Boletim.Infra.Fila
 
         public const string IniciarSync = "serap.boletim.iniciar.sync";
 
-        public const string ProvaSync = "serap.boletim.prova.sync";
-        public const string ProvaTratar = "serap.boletim.prova.tratar";
+        public const string BuscaProvasFinalizadas = "serap.boletim.busca.provas.finalizadas";
+        public const string BuscaAlunosProvaProficienciaBoletim = "serap.boletim.busca.alunos.prova.proficiencia.boletim";
+        public const string TrataBoletimProvaAluno = "serap.boletim.tratar.boletim.prova.aluno";
     }
 }
