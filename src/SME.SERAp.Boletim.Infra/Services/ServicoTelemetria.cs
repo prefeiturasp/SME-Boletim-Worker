@@ -1,14 +1,8 @@
-﻿using Elastic.Apm.Api;
-using Elastic.Apm;
-using Microsoft.ApplicationInsights;
-using SME.SERAp.Boletim.Infra.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Elastic.Apm;
+using Elastic.Apm.Api;
 using SME.SERAp.Boletim.Infra.EnvironmentVariables;
+using SME.SERAp.Boletim.Infra.Interfaces;
+using System.Diagnostics;
 
 namespace SME.SERAp.Boletim.Infra.Services
 {

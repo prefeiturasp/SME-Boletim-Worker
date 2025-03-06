@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using SME.SERAp.Boletim.Aplicacao.Interfaces;
+using SME.SERAp.Boletim.Aplicacao.UseCases;
+using SME.SERAp.Boletim.Dados.Interfaces;
+using SME.SERAp.Boletim.Dados.Mapeamentos;
+using SME.SERAp.Boletim.Dados.Repositories;
 using SME.SERAp.Boletim.Infra.Interfaces;
 using SME.SERAp.Boletim.Infra.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SME.SERAp.Boletim.IoC.Extensions
 {
@@ -20,10 +20,10 @@ namespace SME.SERAp.Boletim.IoC.Extensions
 
             RegistrarServicos(services);
             RegistrarRepositorios(services);
-            RegistrarRepositoriosSerap(services);
             RegistrarRepositoriosCoresso(services);
             RegistrarRepositoriosEol(services);
             RegistrarCasosDeUso(services);
+            RegistrarMapeamentos.Registrar();
         }
 
         private static void RegistrarServicos(IServiceCollection services)
@@ -34,27 +34,26 @@ namespace SME.SERAp.Boletim.IoC.Extensions
 
         private static void RegistrarRepositorios(IServiceCollection services)
         {
-           
+            services.AddScoped<IRepositorioProva, RepositorioProva>();
+            services.AddScoped<IRepositorioAlunoProvaProficiencia, RepositorioAlunoProvaProficiencia>();
+            services.AddScoped<IRepositorioBoletimProvaAluno, RepositorioBoletimProvaAluno>();
         }
 
         private static void RegistrarRepositoriosEol(IServiceCollection services)
         {
-            
+
         }
 
         private static void RegistrarRepositoriosCoresso(IServiceCollection services)
         {
-            
-        }
 
-        private static void RegistrarRepositoriosSerap(IServiceCollection services)
-        {
-           
         }
 
         private static void RegistrarCasosDeUso(IServiceCollection services)
         {
-           
+            services.AddScoped<IBuscaProvasFinalizadasUseCase, BuscaProvasFinalizadasUseCase>();
+            services.AddScoped<IBuscaAlunosProvaProficienciaBoletimUseCase, BuscaAlunosProvaProficienciaBoletimUseCase>();
+            services.AddScoped<ITratarBoletimProvaAlunoUseCase, TratarBoletimProvaAlunoUseCase>();
         }
     }
 }

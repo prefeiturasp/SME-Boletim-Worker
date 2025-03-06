@@ -1,13 +1,10 @@
 ﻿using SME.SERAp.Boletim.Dominio.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SME.SERAp.Boletim.Infra.Dtos;
 
 namespace SME.SERAp.Boletim.Dados.Interfaces
 {
     public interface IRepositorioProva : IRepositorioBase<Prova>
     {
+        Task<IEnumerable<ProvaDto>> ObterProvasFinalizadasPorData(DateTime data);
     }
 }

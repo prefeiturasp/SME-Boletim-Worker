@@ -1,21 +1,44 @@
-﻿using Nest;
+﻿using Dapper;
 using SME.SERAp.Boletim.Dados.Interfaces;
 using SME.SERAp.Boletim.Dominio.Entities;
+using SME.SERAp.Boletim.Infra.Dtos;
 using SME.SERAp.Boletim.Infra.EnvironmentVariables;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SME.SERAp.Boletim.Dados.Repositories
 {
     public class RepositorioProva : RepositorioBase<Prova>, IRepositorioProva
     {
-        private readonly ConnectionStringOptions connectionStrings;
-        public RepositorioProva(ConnectionStringOptions connectionStrings):base(connectionStrings)
+        public RepositorioProva(ConnectionStringOptions connectionStrings) : base(connectionStrings)
         {
-            this.connectionStrings = connectionStrings ?? throw new ArgumentNullException(nameof(connectionStrings));
+        }
+
+        public async Task<IEnumerable<ProvaDto>> ObterProvasFinalizadasPorData(DateTime data)
+        {
+            using var conn = ObterConexaoLeitura();
+            try
+            {
+                var query = @"select 
+                                p.id,
+                                p.prova_legado_id as codigo,
+                                p.descricao,
+                                p.modalidade,
+                                p.inicio,
+                                p.fim,
+                                p.data_correcao_inicio as dataCorrecaoInicio,
+                                p.data_correcao_fim  as dataCorrecaoFim,
+                                p.exibir_no_boletim
+                            from
+                                prova p 
+                            where 
+                                p.data_correcao_fim  = @data and p.exibir_no_boletim";
+
+                return await conn.QueryAsync<ProvaDto>(query, new { data });
+            }
+            finally
+            {
+                conn.Close();
+                conn.Dispose();
+            }
         }
     }
 }

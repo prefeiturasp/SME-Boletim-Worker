@@ -1,8 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using RabbitMQ.Client.Events;
 using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
+using SME.SERAp.Boletim.Aplicacao.Interfaces;
 using SME.SERAp.Boletim.Dominio.Entities;
 using SME.SERAp.Boletim.Dominio.Enums;
 using SME.SERAp.Boletim.Infra.EnvironmentVariables;
@@ -12,10 +13,6 @@ using SME.SERAp.Boletim.Infra.Fila;
 using SME.SERAp.Boletim.Infra.Interfaces;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
-using static MongoDB.Driver.WriteConcern;
-using static SME.SERAp.Boletim.Infra.Services.ServicoLog;
-using SME.SERAp.Boletim.Aplicacao.Interfaces;
 
 namespace SME.SERAp.Boletim.Worker
 {
@@ -159,8 +156,9 @@ namespace SME.SERAp.Boletim.Worker
 
         private void RegistrarUseCases()
         {
-            comandos.Add(RotasRabbit.ProvaSync, new ComandoRabbit("Sincronização de provas", typeof(ITratarProvaSyncUseCase)));
-            comandos.Add(RotasRabbit.ProvaTratar, new ComandoRabbit("Tratar provas", typeof(ITratarProvaUseCase)));
+            comandos.Add(RotasRabbit.BuscaProvasFinalizadas, new ComandoRabbit("Busca de provas finalizadas", typeof(IBuscaProvasFinalizadasUseCase)));
+            comandos.Add(RotasRabbit.BuscaAlunosProvaProficienciaBoletim, new ComandoRabbit("Busca alunos prova boletim", typeof(IBuscaAlunosProvaProficienciaBoletimUseCase)));
+            comandos.Add(RotasRabbit.TrataBoletimProvaAluno, new ComandoRabbit("Tratar aluno prova boletim", typeof(ITratarBoletimProvaAlunoUseCase)));
         }
 
         private async Task InicializaConsumerAsync(IChannel channel, CancellationToken stoppingToken)
