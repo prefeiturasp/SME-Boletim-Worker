@@ -10,6 +10,8 @@ namespace SME.SERAp.Boletim.Infra.Dtos
         public Modalidade Modalidade { get; set; }
         public DateTime Inicio { get; set; }
         public DateTime Fim { get; set; }
+        public DateTime DataCorrecaoInicio { get; set; }
+        public DateTime DataCorrecaoFim { get; set; }
         public int QuantidadeQuestoes { get; set; }
         public bool ExibirNoBoletim { get; set; }
     }

@@ -18,17 +18,19 @@ namespace SME.SERAp.Boletim.Dados.Repositories
             try
             {
                 var query = @"select 
-	                            p.id,
-	                            p.prova_legado_id as codigo,
-	                            p.descricao,
-	                            p.modalidade,
-	                            p.inicio,
-	                            p.fim,
-	                            p.exibir_no_boletim
+                                p.id,
+                                p.prova_legado_id as codigo,
+                                p.descricao,
+                                p.modalidade,
+                                p.inicio,
+                                p.fim,
+                                p.data_correcao_inicio as dataCorrecaoInicio,
+                                p.data_correcao_fim  as dataCorrecaoFim,
+                                p.exibir_no_boletim
                             from
-	                            prova p 
+                                prova p 
                             where 
-	                            p.fim = @data and p.exibir_no_boletim";
+                                p.data_correcao_fim  = @data and p.exibir_no_boletim";
 
                 return await conn.QueryAsync<ProvaDto>(query, new { data });
             }
