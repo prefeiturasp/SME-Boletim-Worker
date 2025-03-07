@@ -37,6 +37,7 @@ namespace SME.SERAp.Boletim.IoC.Extensions
             services.AddScoped<IRepositorioProva, RepositorioProva>();
             services.AddScoped<IRepositorioAlunoProvaProficiencia, RepositorioAlunoProvaProficiencia>();
             services.AddScoped<IRepositorioBoletimProvaAluno, RepositorioBoletimProvaAluno>();
+            services.AddScoped<IRepositorioBoletimEscolar, RepositorioBoletimEscolar>();
         }
 
         private static void RegistrarRepositoriosEol(IServiceCollection services)
@@ -51,9 +52,11 @@ namespace SME.SERAp.Boletim.IoC.Extensions
 
         private static void RegistrarCasosDeUso(IServiceCollection services)
         {
-            services.AddScoped<IBuscaProvasFinalizadasUseCase, BuscaProvasFinalizadasUseCase>();
-            services.AddScoped<IBuscaAlunosProvaProficienciaBoletimUseCase, BuscaAlunosProvaProficienciaBoletimUseCase>();
+            services.AddScoped<IBuscarProvasFinalizadasUseCase, BuscarProvasFinalizadasUseCase>();
+            services.AddScoped<IBuscarAlunosProvaProficienciaBoletimUseCase, BuscarAlunosProvaProficienciaBoletimUseCase>();
             services.AddScoped<ITratarBoletimProvaAlunoUseCase, TratarBoletimProvaAlunoUseCase>();
+            services.AddScoped<IBuscarBoletinsEscolaresProvaUseCase, BuscarBoletinsEscolaresProvaUseCase>();
+            services.AddScoped<ITratarBoletimEscolarProvaUseCase, TratarBoletimEscolarProvaUseCase>();
         }
     }
 }

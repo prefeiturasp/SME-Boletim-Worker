@@ -8,10 +8,10 @@ using SME.SERAp.Boletim.Infra.Services;
 
 namespace SME.SERAp.Boletim.Aplicacao.UseCases
 {
-    public class BuscaProvasFinalizadasUseCase : AbstractUseCase, IBuscaProvasFinalizadasUseCase
+    public class BuscarProvasFinalizadasUseCase : AbstractUseCase, IBuscarProvasFinalizadasUseCase
     {
         private readonly IServicoLog servicoLog;
-        public BuscaProvasFinalizadasUseCase(IMediator mediator, IServicoLog servicoLog) : base(mediator)
+        public BuscarProvasFinalizadasUseCase(IMediator mediator, IServicoLog servicoLog) : base(mediator)
         {
             this.servicoLog = servicoLog;
         }
@@ -20,13 +20,13 @@ namespace SME.SERAp.Boletim.Aplicacao.UseCases
         {
             try
             {
-                var dataProvasFinalizadas = DateTime.Now.Date;
+                var dataProvasFinalizadas = DateTime.Now.AddDays(-1).Date;
                 var provasFinalizadas = await mediator.Send(new ObterProvasFinalizadasPorDataQuery(dataProvasFinalizadas));
                 if (provasFinalizadas?.Any() ?? false)
                 {
                     foreach (var provaFinalizada in provasFinalizadas)
                     {
-                        await mediator.Send(new PublicaFilaRabbitCommand(RotasRabbit.BuscaAlunosProvaProficienciaBoletim, provaFinalizada));
+                        await mediator.Send(new PublicaFilaRabbitCommand(RotasRabbit.BuscarAlunosProvaProficienciaBoletim, provaFinalizada));
                     }
                 }
             }

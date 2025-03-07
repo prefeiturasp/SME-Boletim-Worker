@@ -12,6 +12,7 @@ namespace SME.SERAp.Boletim.Dados.Mapeamentos
                 config.AddMap(new ProvaMap());
                 config.AddMap(new BoletimProvaAlunoMap());
                 config.AddMap(new AlunoProvaProficienciaMap());
+                config.AddMap(new BoletimEscolarMap());
 
                 config.ForDommel();
             });
