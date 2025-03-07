@@ -1,6 +1,6 @@
 ﻿namespace SME.SERAp.Boletim.Aplicacao.Interfaces
 {
-    public interface IBuscaProvasFinalizadasUseCase : IUseCase
+    public interface ITratarBoletimEscolarProvaUseCase : IUseCase
     {
     }
 }
