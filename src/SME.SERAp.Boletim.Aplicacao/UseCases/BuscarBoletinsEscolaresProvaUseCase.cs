@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using RabbitMQ.Client;
 using SME.SERAp.Boletim.Aplicacao.Commands.PublicaFilaRabbit;
 using SME.SERAp.Boletim.Aplicacao.Interfaces;
 using SME.SERAp.Boletim.Aplicacao.Queries.ObterBoletinsEscolaresDetalhesPorProvaId;
@@ -14,7 +15,7 @@ namespace SME.SERAp.Boletim.Aplicacao.UseCases
     {
         private readonly IServicoLog servicoLog;
 
-        public BuscarBoletinsEscolaresProvaUseCase(IMediator mediator, IServicoLog servicoLog) : base(mediator)
+        public BuscarBoletinsEscolaresProvaUseCase(IMediator mediator, IChannel channel, IServicoLog servicoLog) : base(mediator, channel)
         {
             this.servicoLog = servicoLog;
         }

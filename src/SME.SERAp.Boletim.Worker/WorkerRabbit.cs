@@ -159,6 +159,7 @@ namespace SME.SERAp.Boletim.Worker
             comandos.Add(RotasRabbit.BuscarProvasFinalizadas, new ComandoRabbit("Buscar de provas finalizadas", typeof(IBuscarProvasFinalizadasUseCase)));
             comandos.Add(RotasRabbit.BuscarAlunosProvaProficienciaBoletim, new ComandoRabbit("Buscar alunos prova boletim", typeof(IBuscarAlunosProvaProficienciaBoletimUseCase)));
             comandos.Add(RotasRabbit.TratarBoletimProvaAluno, new ComandoRabbit("Tratar aluno prova boletim", typeof(ITratarBoletimProvaAlunoUseCase)));
+            comandos.Add(RotasRabbit.BuscarProvasBoletimLote, new ComandoRabbit("Buscar provas boletim lote", typeof(IBuscarProvasBoletimLoteUse)));
             comandos.Add(RotasRabbit.BuscarBoletimEscolarProva, new ComandoRabbit("Buscar boletim escolar prova", typeof(IBuscarBoletinsEscolaresProvaUseCase)));
             comandos.Add(RotasRabbit.TratarBoletimEscolarProva, new ComandoRabbit("Tratar boletim escolar prova", typeof(ITratarBoletimEscolarProvaUseCase)));
         }
