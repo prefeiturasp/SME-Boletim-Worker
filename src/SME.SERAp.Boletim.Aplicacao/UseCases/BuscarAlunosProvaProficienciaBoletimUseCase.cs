@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using RabbitMQ.Client;
 using SME.SERAp.Boletim.Aplicacao.Commands.PublicaFilaRabbit;
 using SME.SERAp.Boletim.Aplicacao.Interfaces;
 using SME.SERAp.Boletim.Aplicacao.Queries.ObterAlunosProvaProficienciaBoletimPorProvaId;
@@ -12,7 +13,7 @@ namespace SME.SERAp.Boletim.Aplicacao.UseCases
     public class BuscarAlunosProvaProficienciaBoletimUseCase : AbstractUseCase, IBuscarAlunosProvaProficienciaBoletimUseCase
     {
         private readonly IServicoLog servicoLog;
-        public BuscarAlunosProvaProficienciaBoletimUseCase(IMediator mediator, IServicoLog servicoLog) : base(mediator)
+        public BuscarAlunosProvaProficienciaBoletimUseCase(IMediator mediator, IChannel channel, IServicoLog servicoLog) : base(mediator, channel)
         {
             this.servicoLog = servicoLog;
         }
@@ -32,6 +33,7 @@ namespace SME.SERAp.Boletim.Aplicacao.UseCases
                     {
                         foreach (var alunoProvaProficienciaBoletim in alunosProvaProficienciaBoletim)
                         {
+                            alunoProvaProficienciaBoletim.BoletimLoteId = provaFinalizadaDto.LoteId;
                             await mediator.Send(new PublicaFilaRabbitCommand(RotasRabbit.TratarBoletimProvaAluno, alunoProvaProficienciaBoletim));
                         }
                     }

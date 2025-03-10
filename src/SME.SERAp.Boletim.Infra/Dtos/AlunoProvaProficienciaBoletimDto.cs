@@ -33,5 +33,7 @@ namespace SME.SERAp.Boletim.Infra.Dtos
         public decimal ErroMedida { get; set; }
 
         public long NivelCodigo { get; set; }
+
+        public long BoletimLoteId { get; set; }
     }
 }

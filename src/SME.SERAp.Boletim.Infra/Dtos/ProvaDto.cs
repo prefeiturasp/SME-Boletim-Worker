@@ -14,5 +14,6 @@ namespace SME.SERAp.Boletim.Infra.Dtos
         public DateTime DataCorrecaoFim { get; set; }
         public int QuantidadeQuestoes { get; set; }
         public bool ExibirNoBoletim { get; set; }
+        public long LoteId { get; set; }
     }
 }
