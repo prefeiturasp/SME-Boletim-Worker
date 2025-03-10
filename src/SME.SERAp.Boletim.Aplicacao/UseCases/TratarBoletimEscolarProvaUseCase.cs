@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using RabbitMQ.Client;
 using SME.SERAp.Boletim.Aplicacao.Interfaces;
 using SME.SERAp.Boletim.Dominio.Entities;
 using SME.SERAp.Boletim.Infra.Dtos;
@@ -11,7 +12,7 @@ namespace SME.SERAp.Boletim.Aplicacao.UseCases
     {
         private readonly IServicoLog servicoLog;
 
-        public TratarBoletimEscolarProvaUseCase(IMediator mediator, IServicoLog servicoLog) : base(mediator)
+        public TratarBoletimEscolarProvaUseCase(IMediator mediator, IChannel channel, IServicoLog servicoLog) : base(mediator, channel)
         {
             this.servicoLog = servicoLog;
         }
