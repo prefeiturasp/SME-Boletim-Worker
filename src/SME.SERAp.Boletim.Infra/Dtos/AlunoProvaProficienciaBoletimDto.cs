@@ -28,7 +28,7 @@ namespace SME.SERAp.Boletim.Infra.Dtos
 
         public ProvaStatus ProvaStatus { get; set; }
 
-        public decimal Profeciencia { get; set; }
+        public decimal Proficiencia { get; set; }
 
         public decimal ErroMedida { get; set; }
 
