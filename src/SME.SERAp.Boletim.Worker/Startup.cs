@@ -125,7 +125,7 @@ namespace SME.SERAp.Boletim.Worker
                 return factory.CreateConnectionAsync().Result;
             });
 
-            services.AddTransient<IChannel>(provider =>
+            services.AddSingleton<IChannel>(provider =>
             {
                 var connection = provider.GetRequiredService<RabbitMQ.Client.IConnection>();
                 return connection.CreateChannelAsync().Result;

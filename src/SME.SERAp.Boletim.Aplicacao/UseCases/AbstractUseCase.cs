@@ -1,19 +1,17 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using RabbitMQ.Client;
 
 namespace SME.SERAp.Boletim.Aplicacao.UseCases
 {
     public abstract class AbstractUseCase
     {
         protected readonly IMediator mediator;
+        protected readonly IChannel channel;
 
-        public AbstractUseCase(IMediator mediator)
+        public AbstractUseCase(IMediator mediator, IChannel channel)
         {
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+            this.channel = channel ?? throw new ArgumentNullException(nameof(channel));
         }
     }
 }
