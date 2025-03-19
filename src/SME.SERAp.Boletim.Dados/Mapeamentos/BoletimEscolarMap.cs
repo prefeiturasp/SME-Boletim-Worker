@@ -14,6 +14,7 @@ namespace SME.SERAp.Boletim.Dados.Mapeamentos
             Map(c => c.UeId).ToColumn("ue_id");
             Map(c => c.ProvaId).ToColumn("prova_id");
             Map(c => c.ComponenteCurricular).ToColumn("componente_curricular");
+            Map(c => c.DisciplinaId).ToColumn("disciplina_id");
             Map(c => c.AbaixoBasico).ToColumn("abaixo_basico");
             Map(c => c.AbaixoBasicoPorcentagem).ToColumn("abaixo_basico_porcentagem");
             Map(c => c.Basico).ToColumn("basico");
