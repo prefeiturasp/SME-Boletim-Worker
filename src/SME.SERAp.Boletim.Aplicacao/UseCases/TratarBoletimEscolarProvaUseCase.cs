@@ -38,7 +38,7 @@ namespace SME.SERAp.Boletim.Aplicacao.UseCases
 
         private static BoletimEscolar ObterBoletimEscolar(BoletimEscolarDetalhesDto boletimEscolarDetalhesDto)
         {
-            return new BoletimEscolar(boletimEscolarDetalhesDto.UeId, boletimEscolarDetalhesDto.ProvaId, boletimEscolarDetalhesDto.ComponenteCurricular,
+            return new BoletimEscolar(boletimEscolarDetalhesDto.UeId, boletimEscolarDetalhesDto.ProvaId, boletimEscolarDetalhesDto.ComponenteCurricular, boletimEscolarDetalhesDto.DisciplinaId,
                 boletimEscolarDetalhesDto.AbaixoBasico, boletimEscolarDetalhesDto.AbaixoBasicoPorcentagem, boletimEscolarDetalhesDto.Basico, boletimEscolarDetalhesDto.BasicoPorcentagem,
                 boletimEscolarDetalhesDto.Adequado, boletimEscolarDetalhesDto.AdequadoPorcentagem, boletimEscolarDetalhesDto.Avancado, boletimEscolarDetalhesDto.AvancadoPorcentagem,
                 boletimEscolarDetalhesDto.Total, boletimEscolarDetalhesDto.MediaProficiencia);
