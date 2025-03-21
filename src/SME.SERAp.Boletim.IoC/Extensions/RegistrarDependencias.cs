@@ -39,6 +39,7 @@ namespace SME.SERAp.Boletim.IoC.Extensions
             services.AddScoped<IRepositorioBoletimProvaAluno, RepositorioBoletimProvaAluno>();
             services.AddScoped<IRepositorioBoletimEscolar, RepositorioBoletimEscolar>();
             services.AddScoped<IRepositorioBoletimLoteProva, RepositorioBoletimLoteProva>();
+            services.AddScoped<IRepositorioLoteProva, RepositorioLoteProva>();
         }
 
         private static void RegistrarRepositoriosEol(IServiceCollection services)
