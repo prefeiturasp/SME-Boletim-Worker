@@ -33,49 +33,5 @@ namespace SME.SERAp.Boletim.Dados.Repositories
                 conn.Dispose();
             }
         }
-
-        public async Task<long> ObterUltimoBoletimLoteId()
-        {
-            using var conn = ObterConexaoLeitura();
-            try
-            {
-                var query = @"select 
-	                            case when max(blp.lote_id) is null then 
-                                    0 
-                                else
-                                    max(blp.lote_id) 
-                                end as ultimoProvaId  
-                            from 
-	                            boletim_lote_prova blp";
-
-                return await conn.QueryFirstAsync<long>(query);
-            }
-            finally
-            {
-                conn.Close();
-                conn.Dispose();
-            }
-        }
-
-        public async Task<int> DesativarTodosBoletimLotes()
-        {
-            using var conn = ObterConexao();
-            try
-            {
-                var query = @"update boletim_lote_prova set exibir_no_boletim = false where exibir_no_boletim = true";
-
-                return await conn.ExecuteAsync(query);
-            }
-
-            catch (Exception ex)
-            {
-                throw;
-            }
-            finally
-            {
-                conn.Close();
-                conn.Dispose();
-            }
-        }
     }
 }
