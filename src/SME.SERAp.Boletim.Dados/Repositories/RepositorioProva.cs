@@ -26,7 +26,8 @@ namespace SME.SERAp.Boletim.Dados.Repositories
                                 p.fim,
                                 p.data_correcao_inicio as dataCorrecaoInicio,
                                 p.data_correcao_fim  as dataCorrecaoFim,
-                                p.exibir_no_boletim
+                                p.exibir_no_boletim,
+                                p.formato_tai as formatoTai
                             from
                                 prova p 
                             where 

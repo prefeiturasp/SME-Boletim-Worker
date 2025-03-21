@@ -7,17 +7,14 @@
             
         }
 
-        public BoletimLoteProva(long provaId, long loteId, bool exibirNoBoletim) : this()
+        public BoletimLoteProva(long provaId, long loteId) : this()
         {
             ProvaId = provaId;
             LoteId = loteId;
-            ExibirNoBoletim = exibirNoBoletim;
         }
 
         public long ProvaId { get; set; }
 
         public long LoteId { get; set; }
-
-        public bool ExibirNoBoletim { get; set; }
     }
 }

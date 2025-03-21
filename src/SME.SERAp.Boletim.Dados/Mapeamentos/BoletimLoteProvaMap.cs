@@ -13,7 +13,6 @@ namespace SME.SERAp.Boletim.Dados.Mapeamentos
 
             Map(c => c.LoteId).ToColumn("lote_id");
             Map(c => c.ProvaId).ToColumn("prova_id");
-            Map(c => c.ExibirNoBoletim).ToColumn("exibir_no_boletim");
         }
     }
 }
