@@ -5,7 +5,5 @@ namespace SME.SERAp.Boletim.Dados.Interfaces
     public interface IRepositorioBoletimLoteProva : IRepositorioBase<BoletimLoteProva>
     {
         Task<IEnumerable<BoletimLoteProva>> ObterBoletimLoteProvaPorLoteId(long loteId);
-        Task<long> ObterUltimoBoletimLoteId();
-        Task<int> DesativarTodosBoletimLotes();
     }
 }

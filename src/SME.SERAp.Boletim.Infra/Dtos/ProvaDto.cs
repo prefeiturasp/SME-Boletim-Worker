@@ -15,5 +15,6 @@ namespace SME.SERAp.Boletim.Infra.Dtos
         public int QuantidadeQuestoes { get; set; }
         public bool ExibirNoBoletim { get; set; }
         public long LoteId { get; set; }
+        public bool FormatoTai { get; set; }
     }
 }
