@@ -1,6 +1,6 @@
 ﻿namespace SME.SERAp.Boletim.Aplicacao.Interfaces
 {
-    public interface IBuscarProvasBoletimLoteUse : IUseCase
+    public interface IBuscarProvasBoletimLoteUseCase : IUseCase
     {
     }
 }

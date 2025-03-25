@@ -9,10 +9,10 @@ using SME.SERAp.Boletim.Infra.Interfaces;
 
 namespace SME.SERAp.Boletim.Aplicacao.UseCases
 {
-    public class BuscarProvasBoletimLoteUse : AbstractUseCase, IBuscarProvasBoletimLoteUse
+    public class BuscarProvasBoletimLoteUseCase : AbstractUseCase, IBuscarProvasBoletimLoteUseCase
     {
         private readonly IServicoLog servicoLog;
-        public BuscarProvasBoletimLoteUse(IMediator mediator, IChannel channel, IServicoLog servicoLog) : base(mediator, channel)
+        public BuscarProvasBoletimLoteUseCase(IMediator mediator, IChannel channel, IServicoLog servicoLog) : base(mediator, channel)
         {
             this.servicoLog = servicoLog;
         }
@@ -31,6 +31,7 @@ namespace SME.SERAp.Boletim.Aplicacao.UseCases
                     foreach (var boletimLoteProva in boletimLoteProvas)
                     {
                         await mediator.Send(new PublicaFilaRabbitCommand(RotasRabbit.BuscarBoletimEscolarProva, boletimLoteProva.ProvaId));
+                        await mediator.Send(new PublicaFilaRabbitCommand(RotasRabbit.BuscarTurmasBoletimResultadoProbabilidadeProva, boletimLoteProva.ProvaId));
                     }
                 }
 
