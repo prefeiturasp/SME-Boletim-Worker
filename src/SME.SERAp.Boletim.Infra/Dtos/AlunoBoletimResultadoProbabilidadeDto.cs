@@ -14,15 +14,17 @@
 
         public long UeId { get; set; }
 
-        public decimal Proficiencia { get; set; }
+        public double Proficiencia { get; set; }
 
-        public IEnumerable<AlunoQuestaoBoletimResultadoProbabilidadeDto> Questoes { get; set; }
+        public int NivelProficiencia { get; set; }
+
+        public List<AlunoQuestaoBoletimResultadoProbabilidadeDto> Questoes { get; set; }
 
         public void AdicionarQuestao(string codigoHabilidade, string descricaoHabilidade,
-            long questaoLegadoId, decimal probabilidade)
+            long questaoLegadoId, double probabilidade)
         {
             Questoes ??= new List<AlunoQuestaoBoletimResultadoProbabilidadeDto>();
-            Questoes.Append(new AlunoQuestaoBoletimResultadoProbabilidadeDto(codigoHabilidade, descricaoHabilidade, 
+            Questoes.Add(new AlunoQuestaoBoletimResultadoProbabilidadeDto(codigoHabilidade, descricaoHabilidade, 
                 questaoLegadoId, probabilidade));
         }
     }

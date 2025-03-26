@@ -8,7 +8,7 @@
         }
 
         public BoletimResultadoProbabilidadeDto(long habilidadeId, string codigoHabilidade, string habilidadeDescricao, string turmaDescricao,
-            long turmaId, long provaId, long ueId, long disciplinaId, long anoEscolar, decimal abaixoDoBasico, decimal basico, decimal adequado, decimal avancado) : this()
+            long turmaId, long provaId, long ueId, long disciplinaId, long anoEscolar, double abaixoDoBasico, double basico, double adequado, double avancado) : this()
         {
             HabilidadeId = habilidadeId;
             CodigoHabilidade = codigoHabilidade;
@@ -43,12 +43,12 @@
 
         public long AnoEscolar { get; set; }
 
-        public decimal AbaixoDoBasico { get; set; }
+        public double AbaixoDoBasico { get; set; }
 
-        public decimal Basico { get; set; }
+        public double Basico { get; set; }
 
-        public decimal Adequado { get; set; }
+        public double Adequado { get; set; }
 
-        public decimal Avancado { get; set; }
+        public double Avancado { get; set; }
     }
 }

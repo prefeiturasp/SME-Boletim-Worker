@@ -10,12 +10,12 @@
 
         public long QuestaoLegadoId { get; set; }
 
-        public decimal Discriminacao { get; set; }
+        public double Discriminacao { get; set; }
 
-        public decimal Dificuldade { get; set; }
+        public double Dificuldade { get; set; }
 
-        public decimal AcertoCasual { get; set; }
+        public double AcertoCasual { get; set; }
 
-        public decimal Probabilidade { get; set; }
+        public Dictionary<int, double> Probabilidades { get; set; }
     }
 }

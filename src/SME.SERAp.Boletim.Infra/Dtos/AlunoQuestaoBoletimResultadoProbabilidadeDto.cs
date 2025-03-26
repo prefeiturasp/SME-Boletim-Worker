@@ -2,7 +2,7 @@
 {
     public class AlunoQuestaoBoletimResultadoProbabilidadeDto
     {
-        public AlunoQuestaoBoletimResultadoProbabilidadeDto(string codigoHabilidade, string descricaoHabilidade, long questaoLegadoId, decimal probabilidade)
+        public AlunoQuestaoBoletimResultadoProbabilidadeDto(string codigoHabilidade, string descricaoHabilidade, long questaoLegadoId, double probabilidade)
         {
             CodigoHabilidade = codigoHabilidade;
             DescricaoHabilidade = descricaoHabilidade;
@@ -16,6 +16,8 @@
 
         public long QuestaoLegadoId { get; set; }
 
-        public decimal Probabilidade { get; set; }
+        public double Probabilidade { get; set; }
+
+        public int NivelProficiencia { get; set; }
     }
 }
