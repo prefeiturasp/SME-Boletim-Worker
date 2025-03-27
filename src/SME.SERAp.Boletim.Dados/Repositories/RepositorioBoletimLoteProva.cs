@@ -19,8 +19,7 @@ namespace SME.SERAp.Boletim.Dados.Repositories
                 var query = @"select
 	                            blp.id,
 	                            blp.lote_id as loteId,
-	                            blp.prova_id as provaId,
-	                            blp.exibir_no_boletim as exibirNoBoletim
+	                            blp.prova_id as provaId
                             from 
 	                            boletim_lote_prova blp 
                             where blp.lote_id = @loteId";

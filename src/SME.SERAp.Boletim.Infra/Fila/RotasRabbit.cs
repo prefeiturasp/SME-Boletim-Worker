@@ -13,5 +13,9 @@
         public const string BuscarProvasBoletimLote = "serap.boletim.buscar.provas.boletim.lote";
         public const string BuscarBoletimEscolarProva = "serap.boletim.buscar.boletim.escolar.prova";
         public const string TratarBoletimEscolarProva = "serap.boletim.tratar.boletim.escolar.prova";
+
+        public const string BuscarTurmasBoletimResultadoProbabilidadeProva = "serap.boletim.buscar.turmas.resultado.probabilidade.prova";
+        public const string TratarTurmaBoletimResultadoProbabilidadeProva = "serap.boletim.tratar.turma.resultado.probabilidade.prova";
+        public const string TratarBoletimResultadoProbabilidadeProva = "serap.boletim.tratar.resultado.probabilidade.prova";
     }
 }
