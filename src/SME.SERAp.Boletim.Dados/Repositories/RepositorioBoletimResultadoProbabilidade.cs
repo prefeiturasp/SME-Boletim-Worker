@@ -87,32 +87,53 @@ namespace SME.SERAp.Boletim.Dados.Repositories
             using var conn = ObterConexaoLeitura();
             try
             {
-                var query = @"select 
-	                            a.id,
-	                            a.nome,
-	                            a.ra as codigo,
-	                            a.turma_id as turmaId,
-	                            t.nome as turmaNome,
-	                            u.ue_id as ueId,
-	                            case when bpa.proficiencia is not null then
-		                            bpa.proficiencia
-	                            else
-		                            0
-	                            end as proficiencia
-                            from 
-	                            aluno a
-                            inner join turma t on
-	                            t.id = a.turma_id
-                            inner join ue u on
-	                            u.id = t.ue_id
-                            left join boletim_prova_aluno bpa on
-	                            bpa.aluno_ra = a.ra and
-	                            bpa.turma = t.nome and
-	                            bpa.ue_codigo = u.ue_id and
-	                            bpa.dre_id = u.dre_id and
-	                            bpa.prova_id = @provaId
+                var query = @"with aluno_prova_filtrada as (
+                                select
+	                                a.id,
+	                                a.nome,
+	                                a.ra as codigo,
+	                                a.turma_id as turmaId,
+	                                t.nome as turmaNome,
+	                                u.ue_id as ueId,
+	                                case
+		                                when app.tipo = 2 then app.proficiencia
+		                                when app.tipo = 0
+		                                and app.proficiencia is not null then app.proficiencia
+		                                else 0
+	                                end as proficiencia,
+	                                row_number() over (partition by a.id
+                                order by
+	                                case
+		                                when app.tipo = 2 then 1
+		                                when app.tipo = 0 then 2
+		                                else 3
+	                                end) as rn
+                                from
+	                                aluno a
+                                inner join turma t on
+	                                t.id = a.turma_id
+                                inner join ue u on
+	                                u.id = t.ue_id
+                                left join aluno_prova_proficiencia app on
+	                                app.ra = a.ra
+	                                and app.aluno_id = a.id
+	                                and app.prova_id = @provaId
+	                                and app.tipo in (0, 2)
+                                where
+	                                t.id = @turmaId
+                            )
+                            select
+	                            id,
+	                            nome,
+	                            codigo,
+	                            turmaId,
+	                            turmaNome,
+	                            ueId,
+	                            proficiencia
+                            from
+	                            aluno_prova_filtrada
                             where
-	                            t.id = @turmaId";
+	                            rn = 1;";
 
                 return await conn.QueryAsync<AlunoBoletimResultadoProbabilidadeDto>(query, new { turmaId, provaId });
             }
