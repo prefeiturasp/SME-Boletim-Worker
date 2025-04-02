@@ -39,6 +39,9 @@ namespace SME.SERAp.Boletim.IoC.Extensions
             services.AddScoped<IRepositorioBoletimProvaAluno, RepositorioBoletimProvaAluno>();
             services.AddScoped<IRepositorioBoletimEscolar, RepositorioBoletimEscolar>();
             services.AddScoped<IRepositorioBoletimLoteProva, RepositorioBoletimLoteProva>();
+            services.AddScoped<IRepositorioLoteProva, RepositorioLoteProva>();
+            services.AddScoped<IRepositorioBoletimResultadoProbabilidade, RepositorioBoletimResultadoProbabilidade>();
+            services.AddScoped<IRepositorioNivelProficiencia, RepositorioNivelProficiencia>();
         }
 
         private static void RegistrarRepositoriosEol(IServiceCollection services)
@@ -56,9 +59,12 @@ namespace SME.SERAp.Boletim.IoC.Extensions
             services.AddScoped<IBuscarProvasFinalizadasUseCase, BuscarProvasFinalizadasUseCase>();
             services.AddScoped<IBuscarAlunosProvaProficienciaBoletimUseCase, BuscarAlunosProvaProficienciaBoletimUseCase>();
             services.AddScoped<ITratarBoletimProvaAlunoUseCase, TratarBoletimProvaAlunoUseCase>();
-            services.AddScoped<IBuscarProvasBoletimLoteUse, BuscarProvasBoletimLoteUse>();
+            services.AddScoped<IBuscarProvasBoletimLoteUseCase, BuscarProvasBoletimLoteUseCase>();
             services.AddScoped<IBuscarBoletinsEscolaresProvaUseCase, BuscarBoletinsEscolaresProvaUseCase>();
             services.AddScoped<ITratarBoletimEscolarProvaUseCase, TratarBoletimEscolarProvaUseCase>();
+            services.AddScoped<IBuscarTurmasBoletimResultadoProbabilidadeProvaUseCase, BuscarTurmasBoletimResultadoProbabilidadeProvaUseCase>();
+            services.AddScoped<ITratarTurmaBoletimResultadoProbabilidadeProvaUseCase, TratarTurmaBoletimResultadoProbabilidadeProvaUseCase>();
+            services.AddScoped<ITrataBoletimResultadoProbabilidadeProvaUseCase, TrataBoletimResultadoProbabilidadeProvaUseCase>();
 
             services.AddSingleton<IConsolidarBoletimEscolarLoteUseCase, ConsolidarBoletimEscolarLoteUseCase>();
         }

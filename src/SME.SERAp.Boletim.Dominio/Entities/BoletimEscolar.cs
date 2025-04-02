@@ -7,13 +7,14 @@
             
         }
 
-        public BoletimEscolar(long ueId, long provaId, string componenteCurricular, decimal abaixoBasico, decimal abaixoBasicoPorcentagem,
+        public BoletimEscolar(long ueId, long provaId, string componenteCurricular, long disciplinaId, decimal abaixoBasico, decimal abaixoBasicoPorcentagem,
             decimal basico, decimal basicoPorcentagem, decimal adequado, decimal adequadoPorcentagem, decimal avancado, decimal avancadoPorcentagem,
             int total, decimal mediaProficiencia) : this()
         {
             UeId = ueId;
             ProvaId = provaId;
             ComponenteCurricular = componenteCurricular;
+            DisciplinaId = disciplinaId;
             AbaixoBasico = abaixoBasico;
             AbaixoBasicoPorcentagem = abaixoBasicoPorcentagem;
             Basico = basico;
@@ -31,6 +32,8 @@
         public long ProvaId { get;set; }
 
         public string ComponenteCurricular { get;set; }
+
+        public long? DisciplinaId { get;set; }
 
         public decimal AbaixoBasico { get; set; }
 
