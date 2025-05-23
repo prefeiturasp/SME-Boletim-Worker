@@ -24,7 +24,7 @@ namespace SME.SERAp.Boletim.Dados.Repositories
 	                            boletim_lote_prova blp
                             inner join lote_prova lp on 
                                 lp.id = blp.lote_id
-                            where blp.status_consolidacao = 1";
+                            where lp.status_consolidacao = 1";
 
                 return await conn.QueryAsync<BoletimLoteProva>(query);
             }
