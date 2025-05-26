@@ -18,6 +18,7 @@ namespace SME.SERAp.Boletim.Dados.Mapeamentos
             Map(c => c.DataInicioLote).ToColumn("data_inicio_lote");
             Map(c => c.DataCriacao).ToColumn("data_criacao");
             Map(c => c.DataAlteracao).ToColumn("data_alteracao");
+            Map(c => c.StatusConsolidacao).ToColumn("status_consolidacao");
         }
     }
 }

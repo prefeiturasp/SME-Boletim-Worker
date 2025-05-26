@@ -1,4 +1,6 @@
-﻿namespace SME.SERAp.Boletim.Dominio.Entities
+﻿using SME.SERAp.Boletim.Dominio.Enums;
+
+namespace SME.SERAp.Boletim.Dominio.Entities
 {
     public class LoteProva : EntidadeBase
     {
@@ -15,6 +17,7 @@
             ExibirNoBoletim = exibirNoBoletim;
             DataCorrecaoFim = dataCorrecaoFim;
             DataInicioLote = dataInicioLote;
+            StatusConsolidacao = LoteStatusConsolidacao.NaoConsolidado;
         }
 
         public string Nome { get; set; }
@@ -24,5 +27,6 @@
         public DateTime DataInicioLote { get; set; }
         public DateTime DataCriacao { get; set; }
         public DateTime? DataAlteracao { get; set; }
+        public LoteStatusConsolidacao StatusConsolidacao { get; set; }
     }
 }
