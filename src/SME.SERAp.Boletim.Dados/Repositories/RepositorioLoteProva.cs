@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using SME.SERAp.Boletim.Dados.Interfaces;
 using SME.SERAp.Boletim.Dominio.Entities;
+using SME.SERAp.Boletim.Dominio.Enums;
 using SME.SERAp.Boletim.Infra.EnvironmentVariables;
 
 namespace SME.SERAp.Boletim.Dados.Repositories
@@ -60,6 +61,36 @@ namespace SME.SERAp.Boletim.Dados.Repositories
 	                                AND lp.tipo_tai = @formatoTai";
 
                 return await conn.QueryAsync<LoteProva>(query, new {inicio, fim, formatoTai });
+            }
+
+            catch (Exception ex)
+            {
+                throw;
+            }
+            finally
+            {
+                conn.Close();
+                conn.Dispose();
+            }
+        }
+
+        public async Task<int> AlterarStatusConsolidacao(long idLotProva, LoteStatusConsolidacao loteStatusConsolidacao)
+        {
+            using var conn = ObterConexao();
+            try
+            {
+                var query = @"UPDATE 
+                                lote_prova 
+                            SET 
+                                status_consolidacao = @loteStatusConsolidacao, 
+                                data_alteracao = NOW()
+                            WHERE 
+                                id = @idLotProva";
+
+                if(loteStatusConsolidacao == LoteStatusConsolidacao.Pendente)
+                    query += " and status_consolidacao not in (1,2)";
+
+                return await conn.ExecuteAsync(query, new { idLotProva, loteStatusConsolidacao });
             }
 
             catch (Exception ex)
