@@ -11,7 +11,7 @@ namespace SME.SERAp.Boletim.Dados.Repositories
         {
         }
 
-        public async Task<IEnumerable<BoletimLoteProva>> ObterBoletimLoteProvaPorLoteId(long loteId)
+        public async Task<IEnumerable<BoletimLoteProva>> ObterBoletimLoteProvaPendentes()
         {
             using var conn = ObterConexaoLeitura();
             try
@@ -21,10 +21,12 @@ namespace SME.SERAp.Boletim.Dados.Repositories
 	                            blp.lote_id as loteId,
 	                            blp.prova_id as provaId
                             from 
-	                            boletim_lote_prova blp 
-                            where blp.lote_id = @loteId";
+	                            boletim_lote_prova blp
+                            inner join lote_prova lp on 
+                                lp.id = blp.lote_id
+                            where lp.status_consolidacao = 1";
 
-                return await conn.QueryAsync<BoletimLoteProva>(query, new { loteId });
+                return await conn.QueryAsync<BoletimLoteProva>(query);
             }
             finally
             {

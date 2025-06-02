@@ -1,9 +1,10 @@
 ﻿using MediatR;
 using RabbitMQ.Client;
+using SME.SERAp.Boletim.Aplicacao.Commands.LoteProva.AlterarStatusConsolidacao;
 using SME.SERAp.Boletim.Aplicacao.Commands.PublicaFilaRabbit;
 using SME.SERAp.Boletim.Aplicacao.Interfaces;
-using SME.SERAp.Boletim.Aplicacao.Queries.ObterBoletimLoteProvaPorLoteId;
-using SME.SERAp.Boletim.Infra.Exceptions;
+using SME.SERAp.Boletim.Aplicacao.Queries.ObterBoletimLoteProvaPendentes;
+using SME.SERAp.Boletim.Dominio.Enums;
 using SME.SERAp.Boletim.Infra.Fila;
 using SME.SERAp.Boletim.Infra.Interfaces;
 
@@ -21,13 +22,11 @@ namespace SME.SERAp.Boletim.Aplicacao.UseCases
         {
             try
             {
-                var loteId = long.Parse(mensagemRabbit.Mensagem.ToString() ?? string.Empty);
-                if (loteId == 0)
-                    throw new NegocioException("O Id do lote deve ser informado.");
-
-                var boletimLoteProvas = await mediator.Send(new ObterBoletimLoteProvaPorLoteIdQuery(loteId));
+                var boletimLoteProvas = await mediator.Send(new ObterBoletimLoteProvaPendentesQuery());
                 if (boletimLoteProvas?.Any() ?? false)
                 {
+                    await AlterarStatusLotesProvas(boletimLoteProvas);
+
                     foreach (var boletimLoteProva in boletimLoteProvas)
                     {
                         await mediator.Send(new PublicaFilaRabbitCommand(RotasRabbit.BuscarBoletimEscolarProva, boletimLoteProva.ProvaId));
@@ -42,7 +41,13 @@ namespace SME.SERAp.Boletim.Aplicacao.UseCases
                 servicoLog.Registrar(ex);
                 return false;
             }
+        }
 
+        private async Task AlterarStatusLotesProvas(IEnumerable<Dominio.Entities.BoletimLoteProva> boletimLoteProvas)
+        {
+            var lotesIds = boletimLoteProvas.Select(x => x.LoteId).Distinct().ToList();
+            foreach (var loteId in lotesIds)
+                await mediator.Send(new AlterarLoteProvaStatusConsolidacaoCommand(loteId, LoteStatusConsolidacao.Consolidado));
         }
     }
 }
