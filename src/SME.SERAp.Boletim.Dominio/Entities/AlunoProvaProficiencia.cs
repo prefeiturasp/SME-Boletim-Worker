@@ -13,5 +13,11 @@ namespace SME.SERAp.Boletim.Dominio.Entities
         public AlunoProvaProficienciaTipo Tipo { get; set; }
         public DateTime UltimaAtualizacao { get; set; }
         public decimal ErroMedida { get; set; }
+
+        public void Validar()
+        {
+            if (Proficiencia < 0)
+                throw new Exception("A proficiência não pode ser negativa.");
+        }
     }
 }
