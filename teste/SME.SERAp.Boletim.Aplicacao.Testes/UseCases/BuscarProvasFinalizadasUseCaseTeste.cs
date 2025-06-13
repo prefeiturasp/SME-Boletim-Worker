@@ -10,7 +10,7 @@ using SME.SERAp.Boletim.Infra.Dtos;
 using SME.SERAp.Boletim.Infra.Fila;
 using SME.SERAp.Boletim.Infra.Interfaces;
 
-namespace SME.SERAp.Boletim.Aplicacao.Testes.UsesCases
+namespace SME.SERAp.Boletim.Aplicacao.Testes.UseCases
 {
     public class BuscarProvasFinalizadasUseCaseTeste
     {

@@ -7,7 +7,7 @@ using SME.SERAp.Boletim.Infra.Fila;
 using SME.SERAp.Boletim.Infra.Interfaces;
 using System.Text.Json;
 
-namespace SME.SERAp.Boletim.Aplicacao.Testes.UsesCases
+namespace SME.SERAp.Boletim.Aplicacao.Testes.UseCases
 {
     public class TrataBoletimResultadoProbabilidadeProvaUseCaseTeste
     {
@@ -27,22 +27,7 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.UsesCases
         [Fact]
         public async Task Deve_Inserir_Boletim_Resultado_Probabilidade()
         {
-            var boletimResultadoProbabilidadeDto = new BoletimResultadoProbabilidadeDto
-            {
-                HabilidadeId = 1,
-                CodigoHabilidade = "HAB001",
-                HabilidadeDescricao = "Descrição",
-                TurmaDescricao = "Turma A",
-                TurmaId = 2,
-                ProvaId = 3,
-                UeId = 4,
-                DisciplinaId = 5,
-                AnoEscolar = 2025,
-                AbaixoDoBasico = 0.1,
-                Basico = 0.2,
-                Adequado = 0.3,
-                Avancado = 0.4
-            };
+            BoletimResultadoProbabilidadeDto boletimResultadoProbabilidadeDto = ObterBoletimResultadoProbabilidadeDto();
 
             var mensagemRabbit = new MensagemRabbit(JsonSerializer.Serialize(boletimResultadoProbabilidadeDto), Guid.NewGuid());
 
@@ -85,7 +70,21 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.UsesCases
         [Fact]
         public async Task Deve_Retornar_False_Quando_Ocorrer_Excecao()
         {
-            var boletimResultadoProbabilidadeDto = new BoletimResultadoProbabilidadeDto
+            var boletimResultadoProbabilidadeDto = ObterBoletimResultadoProbabilidadeDto();
+
+            var mensagemRabbit = new MensagemRabbit(JsonSerializer.Serialize(boletimResultadoProbabilidadeDto), Guid.NewGuid());
+
+            mediator.Setup(x => x.Send(It.IsAny<InserirBoletimResultadoProbabilidadeCommand>(), default)).ThrowsAsync(new Exception("Erro"));
+
+            var resultado = await trataBoletimResultadoProbabilidadeProvaUseCase.Executar(mensagemRabbit);
+
+            Assert.False(resultado);
+            serviceLog.Verify(x => x.Registrar(It.IsAny<Exception>()), Times.Once);
+        }
+
+        private static BoletimResultadoProbabilidadeDto ObterBoletimResultadoProbabilidadeDto()
+        {
+            return new BoletimResultadoProbabilidadeDto
             {
                 HabilidadeId = 1,
                 CodigoHabilidade = "HAB001",
@@ -101,15 +100,6 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.UsesCases
                 Adequado = 0.3,
                 Avancado = 0.4
             };
-
-            var mensagemRabbit = new MensagemRabbit(JsonSerializer.Serialize(boletimResultadoProbabilidadeDto), Guid.NewGuid());
-
-            mediator.Setup(x => x.Send(It.IsAny<InserirBoletimResultadoProbabilidadeCommand>(), default)).ThrowsAsync(new Exception("Erro"));
-
-            var resultado = await trataBoletimResultadoProbabilidadeProvaUseCase.Executar(mensagemRabbit);
-
-            Assert.False(resultado);
-            serviceLog.Verify(x => x.Registrar(It.IsAny<Exception>()), Times.Once);
         }
     }
 }

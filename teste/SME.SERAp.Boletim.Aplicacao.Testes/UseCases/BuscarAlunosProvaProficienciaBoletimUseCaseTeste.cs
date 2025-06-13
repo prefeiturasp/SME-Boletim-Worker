@@ -11,7 +11,7 @@ using SME.SERAp.Boletim.Infra.Fila;
 using SME.SERAp.Boletim.Infra.Interfaces;
 using System.Text.Json;
 
-namespace SME.SERAp.Boletim.Aplicacao.Testes.UsesCases
+namespace SME.SERAp.Boletim.Aplicacao.Testes.UseCases
 {
     public class BuscarAlunosProvaProficienciaBoletimUseCaseTeste
     {

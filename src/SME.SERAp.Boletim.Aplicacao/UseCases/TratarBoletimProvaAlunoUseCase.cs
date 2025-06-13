@@ -15,13 +15,11 @@ namespace SME.SERAp.Boletim.Aplicacao.UseCases
     {
         private readonly IServicoLog servicoLog;
         private readonly IConsolidarBoletimEscolarLoteUseCase consolidarBoletimEscolarUseCase;
-        private readonly RabbitOptions rabbitOptions;
 
-        public TratarBoletimProvaAlunoUseCase(IMediator mediator, IChannel channel, IServicoLog servicoLog, IConsolidarBoletimEscolarLoteUseCase consolidarBoletimEscolarUseCase, RabbitOptions rabbitOptions) : base(mediator, channel)
+        public TratarBoletimProvaAlunoUseCase(IMediator mediator, IChannel channel, IServicoLog servicoLog, IConsolidarBoletimEscolarLoteUseCase consolidarBoletimEscolarUseCase) : base(mediator, channel)
         {
             this.servicoLog = servicoLog;
             this.consolidarBoletimEscolarUseCase = consolidarBoletimEscolarUseCase;
-            this.rabbitOptions = rabbitOptions;
         }
 
         public async Task<bool> Executar(MensagemRabbit mensagemRabbit)
