@@ -1,7 +1,7 @@
 ﻿using SME.SERAp.Boletim.Dominio.Entities;
 using SME.SERAp.Boletim.Dominio.Enums;
 
-namespace SME.SERAp.Boletim.Dominio.Teste
+namespace SME.SERAp.Boletim.Dominio.Teste.Entities
 {
     public class AlunoProvaProficienciaTeste
     {
