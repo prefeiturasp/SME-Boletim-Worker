@@ -165,6 +165,8 @@ namespace SME.SERAp.Boletim.Worker
             comandos.Add(RotasRabbit.BuscarTurmasBoletimResultadoProbabilidadeProva, new ComandoRabbit("Buscar turmas escolar prova", typeof(IBuscarTurmasBoletimResultadoProbabilidadeProvaUseCase)));
             comandos.Add(RotasRabbit.TratarTurmaBoletimResultadoProbabilidadeProva, new ComandoRabbit("Tratar turmas escolar prova", typeof(ITratarTurmaBoletimResultadoProbabilidadeProvaUseCase)));
             comandos.Add(RotasRabbit.TratarBoletimResultadoProbabilidadeProva, new ComandoRabbit("Tratar boletim resultado probabilidade", typeof(ITrataBoletimResultadoProbabilidadeProvaUseCase)));
+            comandos.Add(RotasRabbit.BuscarBoletimLoteUe, new ComandoRabbit("Buscar boletim lote ue", typeof(IBuscarBoletinsLotesUesUseCase)));
+            comandos.Add(RotasRabbit.TratarBoletimLoteUe, new ComandoRabbit("Tratar boletim lote ue", typeof(ITratarBoletimLoteUeUseCase)));
         }
 
         private async Task InicializaConsumerAsync(IChannel channel, CancellationToken stoppingToken)

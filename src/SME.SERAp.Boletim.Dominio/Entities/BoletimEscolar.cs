@@ -9,7 +9,7 @@
 
         public BoletimEscolar(long ueId, long provaId, string componenteCurricular, long disciplinaId, decimal abaixoBasico, decimal abaixoBasicoPorcentagem,
             decimal basico, decimal basicoPorcentagem, decimal adequado, decimal adequadoPorcentagem, decimal avancado, decimal avancadoPorcentagem,
-            int total, decimal mediaProficiencia) : this()
+            int total, decimal mediaProficiencia, int nivelUeCodigo, string nivelUeDescricao) : this()
         {
             UeId = ueId;
             ProvaId = provaId;
@@ -25,34 +25,25 @@
             AvancadoPorcentagem = avancadoPorcentagem;
             Total = total;
             MediaProficiencia = mediaProficiencia;
+            NivelUeCodigo = nivelUeCodigo;
+            NivelUeDescricao = nivelUeDescricao;
         }
 
         public long UeId { get;set; }
-
         public long ProvaId { get;set; }
-
         public string ComponenteCurricular { get;set; }
-
         public long? DisciplinaId { get;set; }
-
         public decimal AbaixoBasico { get; set; }
-
         public decimal AbaixoBasicoPorcentagem { get; set; }
-
         public decimal Basico { get; set; }
-
         public decimal BasicoPorcentagem { get; set; }
-
         public decimal Adequado { get; set; }
-
         public decimal AdequadoPorcentagem { get; set; }
-
         public decimal Avancado { get; set; }
-
         public decimal AvancadoPorcentagem { get; set; }
-
         public int Total { get; set; }
-
         public decimal MediaProficiencia { get; set; }
+        public int NivelUeCodigo { get; set; }
+        public string NivelUeDescricao { get; set; }
     }
 }
