@@ -42,7 +42,9 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.UseCases
             var resultado = await buscarProvasBoletimLoteUseCase.Executar(mensagemRabbit);
 
             Assert.True(resultado);
-            mediator.Verify(m => m.Send(It.IsAny<PublicaFilaRabbitCommand>(), It.IsAny<CancellationToken>()), Times.Exactly(boletinsLotesProvas.Count * 2));
+
+            var quantidadeVezesChamadaRabbit = (boletinsLotesProvas.Count * 2) + (boletinsLotesProvas.Select(x => x.LoteId).Distinct().Count());
+            mediator.Verify(m => m.Send(It.IsAny<PublicaFilaRabbitCommand>(), It.IsAny<CancellationToken>()), Times.Exactly(quantidadeVezesChamadaRabbit));
         }
 
         [Fact]
