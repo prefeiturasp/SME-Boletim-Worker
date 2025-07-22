@@ -4,6 +4,7 @@ using SME.SERAp.Boletim.Aplicacao.Commands.LoteProva.AlterarStatusConsolidacao;
 using SME.SERAp.Boletim.Aplicacao.Commands.PublicaFilaRabbit;
 using SME.SERAp.Boletim.Aplicacao.Interfaces;
 using SME.SERAp.Boletim.Aplicacao.Queries.ObterBoletimLoteProvaPendentes;
+using SME.SERAp.Boletim.Dominio.Entities;
 using SME.SERAp.Boletim.Dominio.Enums;
 using SME.SERAp.Boletim.Infra.Fila;
 using SME.SERAp.Boletim.Infra.Interfaces;
@@ -27,6 +28,8 @@ namespace SME.SERAp.Boletim.Aplicacao.UseCases
                 {
                     await AlterarStatusLotesProvas(boletimLoteProvas);
 
+                    await GerarBoletimLoteUes(boletimLoteProvas);
+
                     foreach (var boletimLoteProva in boletimLoteProvas)
                     {
                         await mediator.Send(new PublicaFilaRabbitCommand(RotasRabbit.BuscarBoletimEscolarProva, boletimLoteProva.ProvaId));
@@ -43,7 +46,14 @@ namespace SME.SERAp.Boletim.Aplicacao.UseCases
             }
         }
 
-        private async Task AlterarStatusLotesProvas(IEnumerable<Dominio.Entities.BoletimLoteProva> boletimLoteProvas)
+        private async Task GerarBoletimLoteUes(IEnumerable<BoletimLoteProva> boletimLoteProvas)
+        {
+            var lotesIds = boletimLoteProvas.Select(x => x.LoteId).Distinct().ToList();
+            foreach (var loteId in lotesIds)
+                await mediator.Send(new PublicaFilaRabbitCommand(RotasRabbit.BuscarBoletimLoteUe, loteId));
+        }
+
+        private async Task AlterarStatusLotesProvas(IEnumerable<BoletimLoteProva> boletimLoteProvas)
         {
             var lotesIds = boletimLoteProvas.Select(x => x.LoteId).Distinct().ToList();
             foreach (var loteId in lotesIds)
