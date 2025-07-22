@@ -22,6 +22,8 @@ namespace SME.SERAp.Boletim.Dominio.Teste.Entities
             decimal avancadoPorcentagem = 9.4m;
             int total = 100;
             decimal mediaProficiencia = 250.75m;
+            int nivelUeCodigo = 1;
+            string nivelUeDescricao = "Nível 1";
 
             var boletim = new BoletimEscolar(
                 ueId, provaId, componenteCurricular, disciplinaId,
@@ -29,7 +31,8 @@ namespace SME.SERAp.Boletim.Dominio.Teste.Entities
                 basico, basicoPorcentagem,
                 adequado, adequadoPorcentagem,
                 avancado, avancadoPorcentagem,
-                total, mediaProficiencia
+                total, mediaProficiencia, 
+                nivelUeCodigo, nivelUeDescricao
             );
 
             Assert.Equal(ueId, boletim.UeId);
@@ -46,6 +49,8 @@ namespace SME.SERAp.Boletim.Dominio.Teste.Entities
             Assert.Equal(avancadoPorcentagem, boletim.AvancadoPorcentagem);
             Assert.Equal(total, boletim.Total);
             Assert.Equal(mediaProficiencia, boletim.MediaProficiencia);
+            Assert.Equal(nivelUeCodigo, boletim.NivelUeCodigo);
+            Assert.Equal(nivelUeDescricao, boletim.NivelUeDescricao);
         }
     }
 }
