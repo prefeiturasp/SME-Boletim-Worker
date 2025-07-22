@@ -51,7 +51,9 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.UseCases
                 cmd.BoletimEscolar.Avancado == boletimEscolarDetalhesDto.Avancado &&
                 cmd.BoletimEscolar.AvancadoPorcentagem == boletimEscolarDetalhesDto.AvancadoPorcentagem &&
                 cmd.BoletimEscolar.Total == boletimEscolarDetalhesDto.Total &&
-                cmd.BoletimEscolar.MediaProficiencia == boletimEscolarDetalhesDto.MediaProficiencia
+                cmd.BoletimEscolar.MediaProficiencia == boletimEscolarDetalhesDto.MediaProficiencia &&
+                cmd.BoletimEscolar.NivelUeCodigo == boletimEscolarDetalhesDto.NivelUeCodigo &&
+                cmd.BoletimEscolar.NivelUeDescricao == boletimEscolarDetalhesDto.NivelUeDescricao
             ), default), Times.Once);
         }
 
@@ -101,7 +103,9 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.UseCases
                 Avancado = 0.4M,
                 AvancadoPorcentagem = 0.4M,
                 Total = 100,
-                MediaProficiencia = 0.75M
+                MediaProficiencia = 0.75M,
+                NivelUeCodigo = 1,
+                NivelUeDescricao = "Nível 1"
             };
         }
     }
