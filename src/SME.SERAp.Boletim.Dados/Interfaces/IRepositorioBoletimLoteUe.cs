@@ -10,5 +10,9 @@ namespace SME.SERAp.Boletim.Dados.Interfaces
         Task<IEnumerable<BoletimLoteUe>> ObterUesTotalAlunosPorLoteId(long loteId);
 
         Task<IEnumerable<BoletimLoteUeRealizaramProvaDto>> ObterUesAlunosRealizaramProvaPorLoteId(long loteId);
+
+        Task<IEnumerable<UeDto>> ObterUesPorAnosEscolares(IEnumerable<string> anosEscolares, int anoLetivo);
+
+        Task<BoletimLoteUeRealizaramProvaDto> ObterUesAlunosRealizaramProva(long loteId, long ueId, int anoEscolar);
     }
 }

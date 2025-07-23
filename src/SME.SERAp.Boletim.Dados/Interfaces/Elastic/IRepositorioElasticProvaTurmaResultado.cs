@@ -9,6 +9,6 @@ namespace SME.SERAp.Boletim.Dados.Interfaces.Elastic
 {
     public interface IRepositorioElasticProvaTurmaResultado
     {
-        Task<ResumoGeralProvaDto> ObterResumoGeralPorUeAsync(long ueId, long provaId);
+        Task<ResumoGeralProvaDto> ObterResumoGeralPorUeAsync(long ueId, long provaId, int anoEscolar);
     }
 }

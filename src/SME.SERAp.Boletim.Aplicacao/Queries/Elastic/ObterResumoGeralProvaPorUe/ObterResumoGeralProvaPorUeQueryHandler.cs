@@ -1,11 +1,6 @@
 ﻿using MediatR;
 using SME.SERAp.Boletim.Dados.Interfaces.Elastic;
 using SME.SERAp.Boletim.Infra.Dtos.Elastic;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SME.SERAp.Boletim.Aplicacao.Queries.Elastic.ObterResumoGeralProvaPorUe
 {
@@ -20,7 +15,7 @@ namespace SME.SERAp.Boletim.Aplicacao.Queries.Elastic.ObterResumoGeralProvaPorUe
 
         public async Task<ResumoGeralProvaDto> Handle(ObterResumoGeralProvaPorUeQuery request, CancellationToken cancellationToken)
         {
-            return await repositorioElasticProvaTurmaResultado.ObterResumoGeralPorUeAsync(request.UeId, request.ProvaId);
+            return await repositorioElasticProvaTurmaResultado.ObterResumoGeralPorUeAsync(request.UeId, request.ProvaId, request.AnoEscolar);
         }
     }
 }

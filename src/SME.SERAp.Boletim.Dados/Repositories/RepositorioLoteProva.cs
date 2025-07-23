@@ -2,6 +2,7 @@
 using SME.SERAp.Boletim.Dados.Interfaces;
 using SME.SERAp.Boletim.Dominio.Entities;
 using SME.SERAp.Boletim.Dominio.Enums;
+using SME.SERAp.Boletim.Infra.Dtos;
 using SME.SERAp.Boletim.Infra.EnvironmentVariables;
 
 namespace SME.SERAp.Boletim.Dados.Repositories
@@ -91,6 +92,48 @@ namespace SME.SERAp.Boletim.Dados.Repositories
                     query += " and status_consolidacao not in (1,2)";
 
                 return await conn.ExecuteAsync(query, new { idLotProva, loteStatusConsolidacao });
+            }
+
+            catch (Exception ex)
+            {
+                throw;
+            }
+            finally
+            {
+                conn.Close();
+                conn.Dispose();
+            }
+        }
+
+        public async Task<IEnumerable<ProvaDto>> ObterProvasTaiAnoPorLoteId(long loteId)
+        {
+            using var conn = ObterConexao();
+            try
+            {
+                var query = @"select
+	                            p.id,
+	                            blp.lote_id as loteId,
+	                            p.modalidade,
+	                            p.inicio,
+	                            p.fim,
+	                            p.data_correcao_inicio as dataCorrecaoInicio,
+	                            p.data_correcao_fim as dataCorrecaoFim,
+	                            p.exibir_no_boletim as exibirNoBoletim,
+	                            p.formato_tai as formatoTai,
+	                            p.descricao,
+	                            pao.ano as anoEscolar
+                            from
+	                            prova p
+                            inner join boletim_lote_prova blp on
+	                            blp.prova_id = p.id
+                            inner join prova_ano_original pao on
+	                            pao.prova_id = p.id
+                            where
+	                            blp.lote_id = @loteId 
+	                            and p.exibir_no_boletim 
+	                            and p.formato_tai";
+
+                return await conn.QueryAsync<ProvaDto>(query, new { loteId });
             }
 
             catch (Exception ex)

@@ -16,5 +16,6 @@ namespace SME.SERAp.Boletim.Infra.Dtos
         public bool ExibirNoBoletim { get; set; }
         public long LoteId { get; set; }
         public bool FormatoTai { get; set; }
+        public int AnoEscolar { get; set; }
     }
 }

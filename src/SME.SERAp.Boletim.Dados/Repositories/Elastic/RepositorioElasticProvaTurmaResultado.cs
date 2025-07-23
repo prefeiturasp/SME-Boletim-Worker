@@ -3,11 +3,6 @@ using SME.SERAp.Boletim.Dados.Interfaces.Elastic;
 using SME.SERAp.Boletim.Dominio.Entities.Elastic;
 using SME.SERAp.Boletim.Infra.Dtos.Elastic;
 using SME.SERAp.Boletim.Infra.EnvironmentVariables;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SME.SERAp.Boletim.Dados.Repositories.Elastic
 {
@@ -17,12 +12,14 @@ namespace SME.SERAp.Boletim.Dados.Repositories.Elastic
         {
         }
 
-        public async Task<ResumoGeralProvaDto> ObterResumoGeralPorUeAsync(long ueId, long provaId)
+        public async Task<ResumoGeralProvaDto> ObterResumoGeralPorUeAsync(long ueId, long provaId, int anoEscolar)
         {
             QueryContainer query = new QueryContainerDescriptor<ProvaTurmaResultado>()
                 .Term(p => p.Field(f => f.ProvaId).Value(provaId))
                 && new QueryContainerDescriptor<ProvaTurmaResultado>()
-                .Term(p => p.Field(f => f.UeId).Value(ueId));
+                .Term(p => p.Field(f => f.UeId).Value(ueId))
+                 && new QueryContainerDescriptor<ProvaTurmaResultado>()
+                .Term(p => p.Field(f => f.Ano).Value(anoEscolar));
 
             var search = new SearchDescriptor<ProvaTurmaResultado>(IndexName)
                 .Query(_ => query)
