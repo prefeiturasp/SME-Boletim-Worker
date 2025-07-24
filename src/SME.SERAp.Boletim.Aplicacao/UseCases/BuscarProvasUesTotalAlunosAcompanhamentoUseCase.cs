@@ -36,17 +36,18 @@ namespace SME.SERAp.Boletim.Aplicacao.UseCases
                 if (!ues?.Any() ?? true)
                     return true;
 
-                foreach (var prova in provasLote)
+                foreach (var provaLote in provasLote.GroupBy(x=> x.AnoEscolar))
                 {
+                    var prova = provaLote.FirstOrDefault();
                     foreach (var ue in ues)
                     {
-                        var provaUe = new ProvaUeDto
+                        var provaUe = new LoteUeDto
                         {
-                            Id = prova.Id,
                             AnoEscolar = prova.AnoEscolar,
                             DreId = ue.DreId,
                             UeId = ue.Id,
-                            LoteId = prova.LoteId
+                            LoteId = prova.LoteId,
+                            ProvasIds = provaLote.Select(x => x.Id).ToList(),
                         };
 
                         await mediator.Send(new PublicaFilaRabbitCommand(RotasRabbit.TratarProvasUesTotalAlunosAcompanhamento, provaUe));

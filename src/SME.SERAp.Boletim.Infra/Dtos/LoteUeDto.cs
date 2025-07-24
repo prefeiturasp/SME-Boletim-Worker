@@ -1,10 +1,10 @@
 ﻿namespace SME.SERAp.Boletim.Infra.Dtos
 {
-    public class ProvaUeDto
+    public class LoteUeDto
     {
-        public long Id { get; set; }
-
         public long LoteId { get; set; }
+
+        public IEnumerable<long> ProvasIds { get; set; }
 
         public long UeId { get; set; }
 

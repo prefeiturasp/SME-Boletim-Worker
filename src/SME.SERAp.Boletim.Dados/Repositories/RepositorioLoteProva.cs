@@ -121,7 +121,8 @@ namespace SME.SERAp.Boletim.Dados.Repositories
 	                            p.exibir_no_boletim as exibirNoBoletim,
 	                            p.formato_tai as formatoTai,
 	                            p.descricao,
-	                            pao.ano as anoEscolar
+	                            pao.ano as anoEscolar,
+                                p.disciplina_id as disciplinaId
                             from
 	                            prova p
                             inner join boletim_lote_prova blp on

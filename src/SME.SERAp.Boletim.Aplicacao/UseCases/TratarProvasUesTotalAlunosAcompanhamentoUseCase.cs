@@ -22,10 +22,11 @@ namespace SME.SERAp.Boletim.Aplicacao.UseCases
         {
             try
             {
-                var provaUeDto = mensagemRabbit.ObterObjetoMensagem<ProvaUeDto>();
+                var provaUeDto = mensagemRabbit.ObterObjetoMensagem<LoteUeDto>();
                 if (provaUeDto is null) return true;
 
-                var provaTurmaAcompanhamento = await mediator.Send(new ObterResumoGeralProvaPorUeQuery(provaUeDto.UeId, provaUeDto.Id, provaUeDto.AnoEscolar));
+                var provaIdBase = provaUeDto.ProvasIds.FirstOrDefault();
+                var provaTurmaAcompanhamento = await mediator.Send(new ObterResumoGeralProvaPorUeQuery(provaUeDto.UeId, provaIdBase, provaUeDto.AnoEscolar));
                 if (provaTurmaAcompanhamento is null || provaTurmaAcompanhamento.TotalAlunos == 0) return true;
 
                 var totalRealizaramProva = 0;
