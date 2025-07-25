@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using Nest;
 using SME.SERAp.Boletim.Dados.Interfaces;
 using SME.SERAp.Boletim.Dominio.Entities;
 using SME.SERAp.Boletim.Infra.Dtos;
@@ -99,6 +98,72 @@ namespace SME.SERAp.Boletim.Dados.Repositories
                                         where blu.lote_id = @loteId and blu.ue_id = @ueId and blu.ano_escolar = @anoEscolar";
 
                 return await conn.ExecuteAsync(query, new { loteId, ueId, anoEscolar });
+            }
+            finally
+            {
+                conn.Close();
+                conn.Dispose();
+            }
+        }
+
+        public async Task<IEnumerable<UeDto>> ObterUesPorAnosEscolares(IEnumerable<string> anosEscolares, int anoLetivo)
+        {
+            using var conn = ObterConexaoLeitura();
+            try
+            {
+                var query = @"select
+	                            u.id,
+	                            u.dre_id as dreId,
+	                            u.nome
+                            from
+	                            ue u
+                            inner join turma t on
+	                            t.ue_id = u.id
+                            where
+	                            t.ano_letivo = @anoLetivo
+	                            and t.ano = ANY(@anosEscolares)
+                            group by
+	                            u.id,
+	                            u.dre_id,
+	                            u.nome";
+
+                return await conn.QueryAsync<UeDto>(query, new { anosEscolares, anoLetivo });
+            }
+            finally
+            {
+                conn.Close();
+                conn.Dispose();
+            }
+        }
+
+        public async Task<BoletimLoteUeRealizaramProvaDto> ObterUesAlunosRealizaramProva(long loteId, long ueId, int anoEscolar)
+        {
+            using var conn = ObterConexaoLeitura();
+            try
+            {
+                var query = @"select
+                                u.dre_id as dreId,
+                                u.id as ueId,
+                                blp.lote_id as loteId,
+                                bpa.ano_escolar as anoEscolar,
+                                count(distinct bpa.aluno_ra) as realizaramProva
+                            from
+                                ue u
+                            inner join boletim_prova_aluno bpa on
+                                bpa.ue_codigo = u.ue_id
+                            inner join boletim_lote_prova blp on
+                                blp.prova_id = bpa.prova_id
+                            where
+                                blp.lote_id = @loteId
+                                and bpa.ano_escolar = @anoEscolar
+                                and u.id = @ueId
+                            group by
+                                u.dre_id,
+                                u.id,
+                                blp.lote_id,
+                                bpa.ano_escolar";
+
+                return await conn.QueryFirstOrDefaultAsync<BoletimLoteUeRealizaramProvaDto>(query, new { loteId, ueId, anoEscolar });
             }
             finally
             {
