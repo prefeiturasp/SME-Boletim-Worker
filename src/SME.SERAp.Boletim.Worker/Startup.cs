@@ -49,6 +49,7 @@ namespace SME.SERAp.Boletim.Worker
             ConfigurarRabbitmq(services);
             ConfigurarRabbitmqLog(services);
             ConfigurarTelemetria(services);
+            ConfigurarElasticSearch(services);
             ConfigurarCoresso(services);
             ConfigurarEol(services);
         }
@@ -101,6 +102,38 @@ namespace SME.SERAp.Boletim.Worker
 
             var conexaoRabbitLog = factoryLog.CreateConnectionAsync().Result;
             IChannel channelLog = conexaoRabbitLog.CreateChannelAsync().Result;
+        }
+
+        private void ConfigurarElasticSearch(IServiceCollection services)
+        {
+            var elasticOptions = new ElasticOptions();
+            Configuration.GetSection(ElasticOptions.Secao).Bind(elasticOptions, c => c.BindNonPublicProperties = true);
+            services.AddSingleton(elasticOptions);
+
+            var nodes = new List<Uri>();
+            if (elasticOptions.Urls.Contains(','))
+            {
+                string[] urls = elasticOptions.Urls.Split(',');
+                foreach (string url in urls)
+                    nodes.Add(new Uri(url));
+            }
+            else
+            {
+                nodes.Add(new Uri(elasticOptions.Urls));
+            }
+
+            var connectionPool = new StaticConnectionPool(nodes);
+            var connectionSettings = new ConnectionSettings(connectionPool);
+            connectionSettings.DefaultIndex(elasticOptions.DefaultIndex);
+
+            if (!string.IsNullOrEmpty(elasticOptions.CertificateFingerprint))
+                connectionSettings.CertificateFingerprint(elasticOptions.CertificateFingerprint);
+
+            if (!string.IsNullOrEmpty(elasticOptions.Username) && !string.IsNullOrEmpty(elasticOptions.Password))
+                connectionSettings.BasicAuthentication(elasticOptions.Username, elasticOptions.Password);
+
+            var elasticClient = new ElasticClient(connectionSettings);
+            services.AddSingleton<IElasticClient>(elasticClient);
         }
 
         private void ConfigurarRabbitmq(IServiceCollection services)
