@@ -3,8 +3,10 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using SME.SERAp.Boletim.Aplicacao.Interfaces;
 using SME.SERAp.Boletim.Aplicacao.UseCases;
 using SME.SERAp.Boletim.Dados.Interfaces;
+using SME.SERAp.Boletim.Dados.Interfaces.Elastic;
 using SME.SERAp.Boletim.Dados.Mapeamentos;
 using SME.SERAp.Boletim.Dados.Repositories;
+using SME.SERAp.Boletim.Dados.Repositories.Elastic;
 using SME.SERAp.Boletim.Infra.Interfaces;
 using SME.SERAp.Boletim.Infra.Services;
 
@@ -42,6 +44,8 @@ namespace SME.SERAp.Boletim.IoC.Extensions
             services.AddScoped<IRepositorioLoteProva, RepositorioLoteProva>();
             services.AddScoped<IRepositorioBoletimResultadoProbabilidade, RepositorioBoletimResultadoProbabilidade>();
             services.AddScoped<IRepositorioNivelProficiencia, RepositorioNivelProficiencia>();
+            services.AddScoped<IRepositorioBoletimLoteUe, RepositorioBoletimLoteUe>();
+            services.AddScoped<IRepositorioElasticProvaTurmaResultado, RepositorioElasticProvaTurmaResultado>();
         }
 
         private static void RegistrarRepositoriosEol(IServiceCollection services)
@@ -67,6 +71,12 @@ namespace SME.SERAp.Boletim.IoC.Extensions
             services.AddScoped<ITrataBoletimResultadoProbabilidadeProvaUseCase, TrataBoletimResultadoProbabilidadeProvaUseCase>();
 
             services.AddSingleton<IConsolidarBoletimEscolarLoteUseCase, ConsolidarBoletimEscolarLoteUseCase>();
+
+            services.AddScoped<IBuscarBoletinsLotesUesUseCase, BuscarBoletinsLotesUesUseCase>();
+            services.AddScoped<ITratarBoletimLoteUeUseCase, TratarBoletimLoteUeUseCase>();
+
+            services.AddScoped<IBuscarProvasUesTotalAlunosAcompanhamentoUseCase, BuscarProvasUesTotalAlunosAcompanhamentoUseCase>();
+            services.AddScoped<ITratarProvasUesTotalAlunosAcompanhamentoUseCase, TratarProvasUesTotalAlunosAcompanhamentoUseCase>();
         }
     }
 }

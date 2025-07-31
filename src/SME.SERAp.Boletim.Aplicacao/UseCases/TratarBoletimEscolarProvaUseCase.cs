@@ -41,7 +41,7 @@ namespace SME.SERAp.Boletim.Aplicacao.UseCases
             return new BoletimEscolar(boletimEscolarDetalhesDto.UeId, boletimEscolarDetalhesDto.ProvaId, boletimEscolarDetalhesDto.ComponenteCurricular, boletimEscolarDetalhesDto.DisciplinaId,
                 boletimEscolarDetalhesDto.AbaixoBasico, boletimEscolarDetalhesDto.AbaixoBasicoPorcentagem, boletimEscolarDetalhesDto.Basico, boletimEscolarDetalhesDto.BasicoPorcentagem,
                 boletimEscolarDetalhesDto.Adequado, boletimEscolarDetalhesDto.AdequadoPorcentagem, boletimEscolarDetalhesDto.Avancado, boletimEscolarDetalhesDto.AvancadoPorcentagem,
-                boletimEscolarDetalhesDto.Total, boletimEscolarDetalhesDto.MediaProficiencia);
+                boletimEscolarDetalhesDto.Total, boletimEscolarDetalhesDto.MediaProficiencia, boletimEscolarDetalhesDto.NivelUeCodigo, boletimEscolarDetalhesDto.NivelUeDescricao);
         }
     }
 }

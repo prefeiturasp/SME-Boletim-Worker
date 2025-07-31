@@ -25,6 +25,8 @@ namespace SME.SERAp.Boletim.Dados.Mapeamentos
             Map(c => c.AvancadoPorcentagem).ToColumn("avancado_porcentagem");
             Map(c => c.Total).ToColumn("total");
             Map(c => c.MediaProficiencia).ToColumn("media_proficiencia");
+            Map(c => c.NivelUeCodigo).ToColumn("nivel_ue_codigo");
+            Map(c => c.NivelUeDescricao).ToColumn("nivel_ue_descricao");
         }
     }
 }
