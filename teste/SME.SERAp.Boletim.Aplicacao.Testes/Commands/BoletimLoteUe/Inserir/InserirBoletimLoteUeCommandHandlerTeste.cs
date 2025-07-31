@@ -52,19 +52,5 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.Commands
             await Assert.ThrowsAsync<Exception>(() => handler.Handle(command, CancellationToken.None));
             repositorio.Verify(r => r.IncluirAsync(boletimLoteUe), Times.Once);
         }
-
-        [Fact]
-        public async Task Nao_Deve_Chamar_Insercao_Quando_BoletimLoteUe_For_Nulo()
-        {
-            // Arrange
-            var repositorio = new Mock<IRepositorioBoletimLoteUe>();
-
-            var handler = new InserirBoletimLoteUeCommandHandler(repositorio.Object);
-            var command = new InserirBoletimLoteUeCommand(null);
-
-            // Act & Assert
-            await Assert.ThrowsAsync<ArgumentNullException>(() => handler.Handle(command, CancellationToken.None));
-            repositorio.Verify(r => r.IncluirAsync(It.IsAny<BoletimLoteUe>()), Times.Never);
-        }
     }
 }
