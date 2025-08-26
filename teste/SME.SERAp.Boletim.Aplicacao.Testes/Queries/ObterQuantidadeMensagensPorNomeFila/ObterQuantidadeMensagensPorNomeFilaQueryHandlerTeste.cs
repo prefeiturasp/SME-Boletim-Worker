@@ -1,13 +1,9 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Moq;
-using Xunit;
+﻿using Moq;
+using RabbitMQ.Client;
 using SME.SERAp.Boletim.Aplicacao.Queries.ObterQuantidadeMensagensPorNomeFila;
 using SME.SERAp.Boletim.Infra.Interfaces;
-using RabbitMQ.Client;
 
-namespace SME.SERAp.Boletim.Dominio.Teste.Queries
+namespace SME.SERAp.Boletim.Aplicacao.Testes.Queries
 {
     public class ObterQuantidadeMensagensPorNomeFilaQueryHandlerTeste
     {

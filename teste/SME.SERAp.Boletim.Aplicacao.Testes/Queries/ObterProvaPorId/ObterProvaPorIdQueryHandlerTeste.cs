@@ -1,12 +1,9 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Moq;
-using Xunit;
+﻿using Moq;
 using SME.SERAp.Boletim.Aplicacao.Queries.ObterProvaPorId;
 using SME.SERAp.Boletim.Dados.Interfaces;
 using SME.SERAp.Boletim.Dominio.Entities;
 
-namespace SME.SERAp.Boletim.Dominio.Teste.Queries
+namespace SME.SERAp.Boletim.Aplicacao.Testes.Queries
 {
     public class ObterProvaPorIdQueryHandlerTeste
     {
