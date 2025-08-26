@@ -4,12 +4,13 @@ using SME.SERAp.Boletim.Dominio.Entities;
 
 namespace SME.SERAp.Boletim.Dados.Testes.Mapeamentos
 {
+
+    [Collection("ColecaoMapeamentos")]
     public class RegistrarMapeamentosTeste
     {
         [Fact]
         public void Deve_Registrar_Todos_Os_Maps_Sem_Erro()
         {
-
             FluentMapper.EntityMaps.Clear();
             var ex = Record.Exception(() => RegistrarMapeamentos.Registrar());
 
@@ -19,7 +20,6 @@ namespace SME.SERAp.Boletim.Dados.Testes.Mapeamentos
         [Fact]
         public void Deve_Registrar_Todos_Os_Maps_Corretamente()
         {
-
             FluentMapper.EntityMaps.Clear();
             RegistrarMapeamentos.Registrar();
 
