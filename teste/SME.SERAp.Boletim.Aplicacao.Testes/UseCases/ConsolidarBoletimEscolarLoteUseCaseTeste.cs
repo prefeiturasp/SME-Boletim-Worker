@@ -57,7 +57,7 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.UseCases
             mediator.Setup(m => m.Send(It.IsAny<PublicaFilaRabbitCommand>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true);
 
-            var delaySegundosPublicar = 10;
+            var delaySegundosPublicar = 2;
             await useCase.Executar(loteId, delaySegundosPublicar);
 
             await Task.Delay(TimeSpan.FromSeconds(delaySegundosPublicar));
