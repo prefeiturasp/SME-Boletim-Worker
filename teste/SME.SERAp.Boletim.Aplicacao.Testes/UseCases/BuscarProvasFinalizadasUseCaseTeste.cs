@@ -77,6 +77,21 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.UseCases
             mediator.Verify(m => m.Send(It.IsAny<PublicaFilaRabbitCommand>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
+        [Fact]
+        public async Task Deve_Retornar_False_Caso_Excecao()
+        {
+            var mensagemRabbit = new MensagemRabbit(string.Empty, Guid.NewGuid());
+
+            mediator.Setup(m => m.Send(It.IsAny<ObterProvasFinalizadasPorDataQuery>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new Exception("Erro teste"));
+
+            var resultado = await buscarProvasFinalizadasUseCase.Executar(mensagemRabbit);
+
+            Assert.False(resultado);
+            mediator.Verify(m => m.Send(It.IsAny<PublicaFilaRabbitCommand>(), It.IsAny<CancellationToken>()), Times.Never);
+            serviceLog.Verify(m => m.Registrar(It.IsAny<Exception>()), Times.Once);
+        }
+
         private static List<ProvaDto> ObterProvasDtos()
         {
             return new List<ProvaDto>

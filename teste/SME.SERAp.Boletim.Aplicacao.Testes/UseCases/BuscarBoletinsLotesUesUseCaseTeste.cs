@@ -96,6 +96,54 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.UseCases
             serviceLog.Verify(x => x.Registrar(It.IsAny<Exception>()), Times.Never);
         }
 
+        [Fact]
+        public async Task Deve_Atualizar_TotalAlunos_Quando_Realizaram_Prova_Maior()
+        {
+            var loteId = 1L;
+            var mensagemRabbit = new MensagemRabbit(JsonSerializer.Serialize(loteId), Guid.NewGuid());
+            var uesBoletinsLotes = ObterBoletinsLotesUes(loteId);
+            var uesAlunos = new List<BoletimLoteUeRealizaramProvaDto>
+            {
+                new BoletimLoteUeRealizaramProvaDto { LoteId = 1, UeId = 2, AnoEscolar = 5, RealizaramProva = 20 }
+            };
+
+            mediator.Setup(m => m.Send(It.IsAny<ObterUesTotalAlunosPorLoteIdQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(uesBoletinsLotes);
+
+            mediator.Setup(m => m.Send(It.IsAny<ObterUesAlunosRealizaramProvaPorLoteIdQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(uesAlunos);
+
+            mediator.Setup(m => m.Send(It.IsAny<PublicaFilaRabbitCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(true);
+
+            var result = await buscarBoletinsLotesUesUseCase.Executar(mensagemRabbit);
+
+            Assert.True(result);
+            Assert.Equal(20, uesBoletinsLotes.FirstOrDefault(x=> x.UeId == 2)!.TotalAlunos);
+        }
+
+        [Fact]
+        public async Task Deve_Retornar_False_Caso_LoteId_Zero()
+        {
+            var loteId = 0;
+            var mensagemRabbit = new MensagemRabbit(JsonSerializer.Serialize(loteId), Guid.NewGuid());
+            var uesBoletinsLotes = ObterBoletinsLotesUes(loteId);
+
+            mediator.Setup(m => m.Send(It.IsAny<ObterUesTotalAlunosPorLoteIdQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((List<BoletimLoteUe>)null!); 
+
+            mediator.Setup(m => m.Send(It.IsAny<ObterUesAlunosRealizaramProvaPorLoteIdQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((List<BoletimLoteUeRealizaramProvaDto>)null!);
+
+            var resultado = await buscarBoletinsLotesUesUseCase.Executar(mensagemRabbit);
+
+            Assert.False(resultado);
+            mediator.Verify(m => m.Send(It.IsAny<PublicaFilaRabbitCommand>(), It.IsAny<CancellationToken>()), Times.Never);
+            mediator.Verify(m => m.Send(It.IsAny<ObterUesTotalAlunosPorLoteIdQuery>(), It.IsAny<CancellationToken>()), Times.Never);
+            mediator.Verify(m => m.Send(It.IsAny<ObterUesAlunosRealizaramProvaPorLoteIdQuery>(), It.IsAny<CancellationToken>()), Times.Never);
+            serviceLog.Verify(x => x.Registrar(It.IsAny<Exception>()), Times.Once);
+        }
+
         private IEnumerable<BoletimLoteUe> ObterBoletinsLotesUes(long loteId)
         {
             return new List<BoletimLoteUe>() 

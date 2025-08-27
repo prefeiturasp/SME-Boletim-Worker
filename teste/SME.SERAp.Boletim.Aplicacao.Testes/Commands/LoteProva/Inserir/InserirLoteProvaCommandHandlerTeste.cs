@@ -1,13 +1,8 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using MediatR;
-using Moq;
-using SME.SERAp.Boletim.Aplicacao;
+﻿using Moq;
 using SME.SERAp.Boletim.Dados.Interfaces;
 using SME.SERAp.Boletim.Dominio.Entities;
-using Xunit;
 
-namespace SME.SERAp.Boletim.Dominio.Teste.Commands
+namespace SME.SERAp.Boletim.Aplicacao.Testes.Commands
 {
     public class InserirLoteProvaCommandHandlerTeste
     {

@@ -3,6 +3,7 @@ using Moq;
 using RabbitMQ.Client;
 using SME.SERAp.Boletim.Aplicacao.Commands.PublicaFilaRabbit;
 using SME.SERAp.Boletim.Aplicacao.Queries.ObterBoletinsEscolaresDetalhesPorProvaId;
+using SME.SERAp.Boletim.Aplicacao.Queries.ObterBoletinsEscolaresPorProvaId;
 using SME.SERAp.Boletim.Aplicacao.Queries.ObterProvaPorId;
 using SME.SERAp.Boletim.Aplicacao.UseCases;
 using SME.SERAp.Boletim.Dominio.Entities;
@@ -111,6 +112,45 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.UseCases
 
             Assert.True(resultado);
             mediator.Verify(m => m.Send(It.IsAny<PublicaFilaRabbitCommand>(), It.IsAny<CancellationToken>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task Deve_Interpretar_ProvaId_Da_Mensagem()
+        {
+            var provaId = 1;
+            var mensagemRabbit = new MensagemRabbit(JsonSerializer.Serialize(provaId), Guid.NewGuid());
+
+            mediator.Setup(m => m.Send(It.IsAny<ObterProvaPorIdQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new Prova { Id = provaId });
+
+            mediator.Setup(m => m.Send(It.IsAny<ObterBoletinsEscolaresDetalhesPorProvaIdQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(ObterBoletinsEscolaresDetalhes(provaId));
+
+            var result = await buscarBoletinsEscolaresProvaUseCase.Executar(mensagemRabbit);
+
+            Assert.True(result);
+            mediator.Verify(m => m.Send(It.Is<ObterProvaPorIdQuery>(q => q.Id == provaId), It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task Deve_Excluir_Boletins_Existentes()
+        {
+            var provaId = 1;
+            var mensagemRabbit = new MensagemRabbit(JsonSerializer.Serialize(provaId), Guid.NewGuid());
+
+            mediator.Setup(m => m.Send(It.IsAny<ObterProvaPorIdQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new Prova { Id = provaId });
+
+            mediator.Setup(m => m.Send(It.IsAny<ObterBoletinsEscolaresDetalhesPorProvaIdQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(ObterBoletinsEscolaresDetalhes(provaId));
+
+            mediator.Setup(m => m.Send(It.IsAny<ObterBoletinsEscolaresPorProvaIdQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<BoletimEscolar> { new BoletimEscolar() });
+
+            var result = await buscarBoletinsEscolaresProvaUseCase.Executar(mensagemRabbit);
+
+            Assert.True(result);
+            mediator.Verify(m => m.Send(It.IsAny<ExcluirBoletinsEscolaresPorProvaIdCommand>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         private static List<BoletimEscolarDetalhesDto> ObterBoletinsEscolaresDetalhes(int provaId)

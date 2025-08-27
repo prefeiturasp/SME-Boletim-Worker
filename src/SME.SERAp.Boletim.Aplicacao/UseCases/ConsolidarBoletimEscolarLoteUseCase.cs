@@ -17,7 +17,7 @@ namespace SME.SERAp.Boletim.Aplicacao.UseCases
             this.mediator = mediator;
         }
 
-        public async Task Executar(long loteId)
+        public async Task Executar(long loteId, int delaySegundosPublicar = 120)
         {
             if (_lotesConsolidar.Contains(loteId))
                 return;
@@ -27,7 +27,7 @@ namespace SME.SERAp.Boletim.Aplicacao.UseCases
 
             _ = Task.Run(async () =>
             {
-                await Task.Delay(TimeSpan.FromMinutes(2));
+                await Task.Delay(TimeSpan.FromSeconds(delaySegundosPublicar));
                 await mediator.Send(new PublicaFilaRabbitCommand(RotasRabbit.BuscarProvasBoletimLote));
                 _lotesConsolidar.Remove(loteId);
             });

@@ -1,11 +1,8 @@
 ﻿using Moq;
-using System.Threading;
-using System.Threading.Tasks;
 using SME.SERAp.Boletim.Aplicacao.Commands.BoletimResultadoProbabilidade.ExcluirPorProvaId;
 using SME.SERAp.Boletim.Dados.Interfaces;
-using Xunit;
 
-namespace SME.SERAp.Boletim.Dominio.Teste.Commands
+namespace SME.SERAp.Boletim.Aplicacao.Testes.Commands
 {
     public class ExcluirBoletinsResultadosProbabilidadesPorProvaIdCommandHandlerTeste
     {
