@@ -28,6 +28,7 @@ namespace SME.SERAp.Boletim.Dados.Testes.Mapeamentos
                 typeof(Prova),
                 typeof(BoletimProvaAluno),
                 typeof(AlunoProvaProficiencia),
+                typeof(AlunoProvaSpProficiencia),
                 typeof(BoletimEscolar),
                 typeof(BoletimLoteProva),
                 typeof(LoteProva),

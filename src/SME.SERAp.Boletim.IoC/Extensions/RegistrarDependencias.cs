@@ -46,6 +46,7 @@ namespace SME.SERAp.Boletim.IoC.Extensions
             services.AddScoped<IRepositorioNivelProficiencia, RepositorioNivelProficiencia>();
             services.AddScoped<IRepositorioBoletimLoteUe, RepositorioBoletimLoteUe>();
             services.AddScoped<IRepositorioElasticProvaTurmaResultado, RepositorioElasticProvaTurmaResultado>();
+            services.AddScoped<IRepositorioAlunoProvaSpProficiencia, RepositorioAlunoProvaSpProficiencia>();
         }
 
         private static void RegistrarRepositoriosEol(IServiceCollection services)

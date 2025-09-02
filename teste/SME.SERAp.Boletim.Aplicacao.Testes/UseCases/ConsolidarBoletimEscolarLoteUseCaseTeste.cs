@@ -62,7 +62,7 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.UseCases
 
             await Task.Delay(TimeSpan.FromSeconds(delaySegundosPublicar));
 
-            mediator.Verify(m => m.Send(It.IsAny<PublicaFilaRabbitCommand>(), It.IsAny<CancellationToken>()), Times.AtLeastOnce);
+            mediator.Verify(m => m.Send(It.IsAny<PublicaFilaRabbitCommand>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
