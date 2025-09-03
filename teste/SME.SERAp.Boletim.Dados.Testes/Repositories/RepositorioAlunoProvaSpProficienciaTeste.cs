@@ -61,7 +61,7 @@ namespace SME.SERAp.Boletim.Dados.Testes.Repositories
                 AreaConhecimentoID = 2,
                 AnoEscolar = "9º",
                 AlunoMatricula = "123456",
-                Valor = "85.5"
+                Valor = 85.5M
             };
 
             conexaoProvaSp

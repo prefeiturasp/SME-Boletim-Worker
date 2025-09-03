@@ -13,7 +13,7 @@ namespace SME.SERAp.Boletim.Infra.Testes.Dtos
             var areaConhecimentoId = 10;
             var anoEscolar = "9º Ano";
             var alunoMatricula = "123456";
-            var valor = "85.5";
+            var valor = 85.5M;
 
             dto.Edicao = edicao;
             dto.AreaConhecimentoID = areaConhecimentoId;
