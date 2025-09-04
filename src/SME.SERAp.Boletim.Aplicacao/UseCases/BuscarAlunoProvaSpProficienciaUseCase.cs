@@ -1,21 +1,21 @@
 ﻿using MediatR;
+using RabbitMQ.Client;
 using SME.SERAp.Boletim.Aplicacao.Commands.PublicaFilaRabbit;
 using SME.SERAp.Boletim.Aplicacao.Interfaces;
 using SME.SERAp.Boletim.Aplicacao.Queries;
 using SME.SERAp.Boletim.Dominio.Entities;
+using SME.SERAp.Boletim.Infra.Extensions;
 using SME.SERAp.Boletim.Infra.Fila;
 using SME.SERAp.Boletim.Infra.Interfaces;
 
 namespace SME.SERAp.Boletim.Aplicacao.UseCases
 {
-    public class BuscarAlunoProvaSpProficienciaUseCase : IBuscarAlunoProvaSpProficienciaUseCase
+    public class BuscarAlunoProvaSpProficienciaUseCase : AbstractUseCase, IBuscarAlunoProvaSpProficienciaUseCase
     {
-        private readonly IMediator mediator;
         private readonly IServicoLog servicoLog;
 
-        public BuscarAlunoProvaSpProficienciaUseCase(IMediator mediator, IServicoLog servicoLog)
+        public BuscarAlunoProvaSpProficienciaUseCase(IMediator mediator, IChannel channel, IServicoLog servicoLog) : base(mediator, channel)
         {
-            this.mediator = mediator;
             this.servicoLog = servicoLog;
         }
 
@@ -31,13 +31,26 @@ namespace SME.SERAp.Boletim.Aplicacao.UseCases
                 var alunoMatricula = boletimProvaAluno.AlunoRa.ToString();
                 var edicaoProvaSp = await ObterEdicaoProvaSp(boletimProvaAluno.ProvaId);
 
-                var alunosProvaSpProficiencia = await mediator
+                var ResultadoAlunoProvaSp = await mediator
                     .Send(new ObterResultadoAlunoProvaSpQuery(edicaoProvaSp, areaDoConhecimentoId, alunoMatricula));
 
-                if (alunosProvaSpProficiencia is null)
+                if (ResultadoAlunoProvaSp is null)
                     return true;
 
-                await mediator.Send(new PublicaFilaRabbitCommand(RotasRabbit.TratarAlunoProvaSpProficiencia, alunosProvaSpProficiencia));
+                var anoEscolar = ResultadoAlunoProvaSp.AnoEscolar?.ConverterParaInt() ?? 0; 
+                var anoLetivo = ResultadoAlunoProvaSp.Edicao?.ConverterParaInt() ?? 0; 
+
+                var alunoProvaSpProficiencia = new AlunoProvaSpProficiencia
+                {
+                    AlunoRa = boletimProvaAluno.AlunoRa,
+                    DisciplinaId = boletimProvaAluno.DisciplinaId,
+                    AnoEscolar = anoEscolar,
+                    AnoLetivo = anoLetivo,
+                    Proficiencia = ResultadoAlunoProvaSp.Valor,
+                    DataAtualizacao = DateTime.Now
+                };
+
+                await mediator.Send(new PublicaFilaRabbitCommand(RotasRabbit.TratarAlunoProvaSpProficiencia, alunoProvaSpProficiencia));
 
                 return true;
             }

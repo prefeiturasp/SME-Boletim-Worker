@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Moq;
+using RabbitMQ.Client;
 using SME.SERAp.Boletim.Aplicacao.Commands.PublicaFilaRabbit;
 using SME.SERAp.Boletim.Aplicacao.Queries;
 using SME.SERAp.Boletim.Aplicacao.UseCases;
@@ -14,14 +15,16 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.UseCases
     public class BuscarAlunoProvaSpProficienciaUseCaseTeste
     {
         private readonly Mock<IMediator> mediator;
+        private readonly Mock<IChannel> channel;
         private readonly Mock<IServicoLog> servicoLog;
         private readonly BuscarAlunoProvaSpProficienciaUseCase useCase;
 
         public BuscarAlunoProvaSpProficienciaUseCaseTeste()
         {
             mediator = new Mock<IMediator>();
+            channel = new Mock<IChannel>();
             servicoLog = new Mock<IServicoLog>();
-            useCase = new BuscarAlunoProvaSpProficienciaUseCase(mediator.Object, servicoLog.Object);
+            useCase = new BuscarAlunoProvaSpProficienciaUseCase(mediator.Object, channel.Object, servicoLog.Object);
         }
 
         [Fact]

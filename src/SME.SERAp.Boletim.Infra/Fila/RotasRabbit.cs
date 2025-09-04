@@ -26,5 +26,7 @@
 
         public const string BuscarAlunoProvaSpProficiencia = "serap.boletim.buscar.aluno.prova.sp.proficiencia";
         public const string TratarAlunoProvaSpProficiencia = "serap.boletim.tratar.aluno.prova.sp.proficiencia";
+
+        public const string BuscarProvaAlunosProvaSpProficiencia = "serap.boletim.buscar.prova.alunos.prova.sp.proficiencia";
     }
 }
