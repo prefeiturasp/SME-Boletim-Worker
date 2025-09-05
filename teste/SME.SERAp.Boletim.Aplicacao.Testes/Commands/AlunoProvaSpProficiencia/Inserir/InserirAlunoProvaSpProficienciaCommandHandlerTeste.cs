@@ -20,6 +20,7 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.Commands
                 AnoLetivo = 2024,
                 DataAtualizacao = DateTime.Now,
                 DisciplinaId = 1,
+                NivelProficiencia = 2,
                 Proficiencia = 250.5M
             };
 
@@ -47,6 +48,7 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.Commands
                 AnoLetivo = 2024,
                 DataAtualizacao = DateTime.Now,
                 DisciplinaId = 1,
+                NivelProficiencia = 2,
                 Proficiencia = 250.5M
             };
 

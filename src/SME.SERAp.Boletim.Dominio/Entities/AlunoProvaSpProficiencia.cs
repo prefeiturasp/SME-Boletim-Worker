@@ -11,6 +11,7 @@
         public long DisciplinaId { get; set; }
 
         public decimal Proficiencia { get; set; }
+        public int NivelProficiencia { get; set; }
 
         public DateTime DataAtualizacao { get; set; }
     }

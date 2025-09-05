@@ -46,6 +46,7 @@ namespace SME.SERAp.Boletim.Aplicacao.UseCases
                     DisciplinaId = boletimProvaAluno.DisciplinaId,
                     AnoEscolar = anoEscolar,
                     AnoLetivo = anoLetivo,
+                    NivelProficiencia = ResultadoAlunoProvaSp.NivelProficiencia,
                     Proficiencia = ResultadoAlunoProvaSp.Valor,
                     DataAtualizacao = DateTime.Now
                 };

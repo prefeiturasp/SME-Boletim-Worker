@@ -22,6 +22,7 @@ namespace SME.SERAp.Boletim.Dados.Repositories
 	                            ra.AreaConhecimentoID,
 	                            ra.AnoEscolar,
 	                            ra.alu_matricula as AlunoMatricula,
+                                ra.NivelProficienciaID as NivelProficiencia,
 	                            ra.Valor
                             from
 	                            ResultadoAluno ra
@@ -51,6 +52,7 @@ namespace SME.SERAp.Boletim.Dados.Repositories
 	                            apsp.ano_letivo  as anoLetivo,
 	                            apsp.disciplina_id as disciplinaId,
 	                            apsp.proficiencia,
+                                apsp.nivel_proficiencia as nivelProficiencia,
 	                            apsp.data_atualizacao as dataAtualizacao
                             from
 	                            aluno_prova_sp_proficiencia apsp

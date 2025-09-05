@@ -10,6 +10,8 @@
 
         public string AlunoMatricula { get; set; }
 
+        public int NivelProficiencia { get; set; }
+
         public decimal Valor { get; set; }
     }
 }

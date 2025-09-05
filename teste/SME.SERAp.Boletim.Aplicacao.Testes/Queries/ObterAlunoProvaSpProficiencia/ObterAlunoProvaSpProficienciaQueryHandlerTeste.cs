@@ -21,6 +21,7 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.Queries
                 AnoEscolar = 5,
                 AnoLetivo = anoLetivo,
                 DisciplinaId = disciplinaId,
+                NivelProficiencia = 2,
                 Proficiencia = 250.5m,
                 DataAtualizacao = DateTime.Now
             };

@@ -35,6 +35,7 @@ namespace SME.SERAp.Boletim.Dados.Testes.Mapeamentos
             Assert.Equal("ano_escolar", map.PropertyMaps.First(p => p.PropertyInfo.Name == nameof(AlunoProvaSpProficiencia.AnoEscolar)).ColumnName);
             Assert.Equal("disciplina_id", map.PropertyMaps.First(p => p.PropertyInfo.Name == nameof(AlunoProvaSpProficiencia.DisciplinaId)).ColumnName);
             Assert.Equal("proficiencia", map.PropertyMaps.First(p => p.PropertyInfo.Name == nameof(AlunoProvaSpProficiencia.Proficiencia)).ColumnName);
+            Assert.Equal("nivel_proficiencia", map.PropertyMaps.First(p => p.PropertyInfo.Name == nameof(AlunoProvaSpProficiencia.NivelProficiencia)).ColumnName);
             Assert.Equal("data_atualizacao", map.PropertyMaps.First(p => p.PropertyInfo.Name == nameof(AlunoProvaSpProficiencia.DataAtualizacao)).ColumnName);
         }
 

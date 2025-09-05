@@ -61,6 +61,7 @@ namespace SME.SERAp.Boletim.Dados.Testes.Repositories
                 AreaConhecimentoID = 2,
                 AnoEscolar = "9º",
                 AlunoMatricula = "123456",
+                NivelProficiencia = 2,
                 Valor = 85.5M
             };
 
@@ -77,6 +78,8 @@ namespace SME.SERAp.Boletim.Dados.Testes.Repositories
             Assert.Equal("2024", resultado.Edicao);
             Assert.Equal(2, resultado.AreaConhecimentoID);
             Assert.Equal("123456", resultado.AlunoMatricula);
+            Assert.Equal(2, resultado.NivelProficiencia);
+            Assert.Equal(85.5M, resultado.Valor);
         }
 
         [Fact]
@@ -89,6 +92,7 @@ namespace SME.SERAp.Boletim.Dados.Testes.Repositories
                 AnoEscolar = 9,
                 AnoLetivo = 2024,
                 DisciplinaId = 3,
+                NivelProficiencia = 2,
                 Proficiencia = 75.5m
             };
 
@@ -104,6 +108,8 @@ namespace SME.SERAp.Boletim.Dados.Testes.Repositories
             Assert.NotNull(resultado);
             Assert.Equal(987654, resultado.AlunoRa);
             Assert.Equal(3, resultado.DisciplinaId);
+            Assert.Equal(2, resultado.NivelProficiencia);
+            Assert.Equal(75.5M, resultado.Proficiencia);
         }
 
         [Fact]
