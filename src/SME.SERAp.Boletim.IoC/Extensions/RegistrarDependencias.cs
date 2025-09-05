@@ -46,6 +46,7 @@ namespace SME.SERAp.Boletim.IoC.Extensions
             services.AddScoped<IRepositorioNivelProficiencia, RepositorioNivelProficiencia>();
             services.AddScoped<IRepositorioBoletimLoteUe, RepositorioBoletimLoteUe>();
             services.AddScoped<IRepositorioElasticProvaTurmaResultado, RepositorioElasticProvaTurmaResultado>();
+            services.AddScoped<IRepositorioAlunoProvaSpProficiencia, RepositorioAlunoProvaSpProficiencia>();
         }
 
         private static void RegistrarRepositoriosEol(IServiceCollection services)
@@ -69,6 +70,9 @@ namespace SME.SERAp.Boletim.IoC.Extensions
             services.AddScoped<IBuscarTurmasBoletimResultadoProbabilidadeProvaUseCase, BuscarTurmasBoletimResultadoProbabilidadeProvaUseCase>();
             services.AddScoped<ITratarTurmaBoletimResultadoProbabilidadeProvaUseCase, TratarTurmaBoletimResultadoProbabilidadeProvaUseCase>();
             services.AddScoped<ITrataBoletimResultadoProbabilidadeProvaUseCase, TrataBoletimResultadoProbabilidadeProvaUseCase>();
+            services.AddScoped<IBuscarAlunoProvaSpProficienciaUseCase, BuscarAlunoProvaSpProficienciaUseCase>();
+            services.AddScoped<ITratarAlunoProvaSpProficienciaUseCase, TratarAlunoProvaSpProficienciaUseCase>();
+            services.AddScoped<IBuscarProvaAlunosProvaSpProficienciaUseCase, BuscarProvaAlunosProvaSpProficienciaUseCase>();
 
             services.AddSingleton<IConsolidarBoletimEscolarLoteUseCase, ConsolidarBoletimEscolarLoteUseCase>();
 

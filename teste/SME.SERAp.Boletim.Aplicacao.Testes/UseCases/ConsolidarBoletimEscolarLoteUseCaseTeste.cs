@@ -49,7 +49,7 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.UseCases
         [Fact]
         public async Task Deve_Disparar_Publicacao_Na_Fila_Apos_Timeout()
         {
-            var loteId = 30;
+            var loteId = 999;
 
             mediator.Setup(m => m.Send(It.IsAny<AlterarLoteProvaStatusConsolidacaoCommand>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(1);
@@ -62,7 +62,7 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.UseCases
 
             await Task.Delay(TimeSpan.FromSeconds(delaySegundosPublicar));
 
-            mediator.Verify(m => m.Send(It.IsAny<PublicaFilaRabbitCommand>(), It.IsAny<CancellationToken>()), Times.AtLeastOnce);
+            mediator.Verify(m => m.Send(It.IsAny<PublicaFilaRabbitCommand>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]

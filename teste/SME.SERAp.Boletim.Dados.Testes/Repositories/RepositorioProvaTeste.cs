@@ -76,5 +76,34 @@ namespace SME.SERAp.Boletim.Dados.Testes.Repositories
             Assert.Single(resultado);
             Assert.Equal("Prova Matemática", resultado.FirstOrDefault()!.Descricao);
         }
+
+        [Fact]
+        public async Task Deve_Obter_Ano_Prova()
+        {
+            var esperado = 2023;
+
+            conexaoLeitura.SetupDapperAsync(c => c.QueryFirstOrDefaultAsync<int>(
+                It.IsAny<string>(),
+                It.IsAny<object>(),
+                null, null, null
+            )).ReturnsAsync(esperado);
+
+            var resultado = await repositorio.ObterAnoProva(1);
+            Assert.NotNull(resultado);
+            Assert.Equal(2023, resultado);
+        }
+
+        [Fact]
+        public async Task Deve_Obter_Ano_Prova_Nulo()
+        {
+            conexaoLeitura.SetupDapperAsync(c => c.QueryFirstOrDefaultAsync<int?>(
+                It.IsAny<string>(),
+                It.IsAny<object>(),
+                null, null, null
+            )).ReturnsAsync((int?)null);
+
+            var resultado = await repositorio.ObterAnoProva(1);
+            Assert.Null(resultado);
+        }
     }
 }
