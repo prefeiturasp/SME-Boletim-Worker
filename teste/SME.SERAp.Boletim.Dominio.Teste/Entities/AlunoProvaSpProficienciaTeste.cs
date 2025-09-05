@@ -14,6 +14,7 @@ namespace SME.SERAp.Boletim.Dominio.Teste.Entities
             var anoLetivo = 2024;
             var disciplinaId = 77L;
             var proficiencia = 85.5m;
+            var nivelProficiencia = 3;
             var dataAtualizacao = new DateTime(2024, 6, 1);
 
             aluno.AlunoRa = alunoRa;
@@ -21,6 +22,7 @@ namespace SME.SERAp.Boletim.Dominio.Teste.Entities
             aluno.AnoLetivo = anoLetivo;
             aluno.DisciplinaId = disciplinaId;
             aluno.Proficiencia = proficiencia;
+            aluno.NivelProficiencia = nivelProficiencia;
             aluno.DataAtualizacao = dataAtualizacao;
 
             Assert.Equal(alunoRa, aluno.AlunoRa);
@@ -29,6 +31,7 @@ namespace SME.SERAp.Boletim.Dominio.Teste.Entities
             Assert.Equal(disciplinaId, aluno.DisciplinaId);
             Assert.Equal(proficiencia, aluno.Proficiencia);
             Assert.Equal(dataAtualizacao, aluno.DataAtualizacao);
+            Assert.Equal(nivelProficiencia, aluno.NivelProficiencia);
         }
 
         [Fact]
@@ -41,6 +44,7 @@ namespace SME.SERAp.Boletim.Dominio.Teste.Entities
             Assert.Equal(0, aluno.AnoLetivo);
             Assert.Equal(0L, aluno.DisciplinaId);
             Assert.Equal(0m, aluno.Proficiencia);
+            Assert.Equal(0, aluno.NivelProficiencia);
             Assert.Equal(default(DateTime), aluno.DataAtualizacao);
         }
     }

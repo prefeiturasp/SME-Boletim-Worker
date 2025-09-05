@@ -70,6 +70,9 @@ namespace SME.SERAp.Boletim.IoC.Extensions
             services.AddScoped<IBuscarTurmasBoletimResultadoProbabilidadeProvaUseCase, BuscarTurmasBoletimResultadoProbabilidadeProvaUseCase>();
             services.AddScoped<ITratarTurmaBoletimResultadoProbabilidadeProvaUseCase, TratarTurmaBoletimResultadoProbabilidadeProvaUseCase>();
             services.AddScoped<ITrataBoletimResultadoProbabilidadeProvaUseCase, TrataBoletimResultadoProbabilidadeProvaUseCase>();
+            services.AddScoped<IBuscarAlunoProvaSpProficienciaUseCase, BuscarAlunoProvaSpProficienciaUseCase>();
+            services.AddScoped<ITratarAlunoProvaSpProficienciaUseCase, TratarAlunoProvaSpProficienciaUseCase>();
+            services.AddScoped<IBuscarProvaAlunosProvaSpProficienciaUseCase, BuscarProvaAlunosProvaSpProficienciaUseCase>();
 
             services.AddSingleton<IConsolidarBoletimEscolarLoteUseCase, ConsolidarBoletimEscolarLoteUseCase>();
 

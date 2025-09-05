@@ -15,6 +15,7 @@ namespace SME.SERAp.Boletim.Dados.Mapeamentos
             Map(c => c.AnoLetivo).ToColumn("ano_letivo");
             Map(c => c.AnoEscolar).ToColumn("ano_escolar");
             Map(c => c.DisciplinaId).ToColumn("disciplina_id");
+            Map(c => c.NivelProficiencia).ToColumn("nivel_proficiencia");
             Map(c => c.Proficiencia).ToColumn("proficiencia");
             Map(c => c.DataAtualizacao).ToColumn("data_atualizacao");
         }

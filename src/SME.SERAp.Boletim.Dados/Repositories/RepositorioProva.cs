@@ -41,5 +41,26 @@ namespace SME.SERAp.Boletim.Dados.Repositories
                 conn.Dispose();
             }
         }
+
+        public async Task<int?> ObterAnoProva(long provaId)
+        {
+            using var conn = ObterConexaoLeitura();
+            try
+            {
+                var query = @"select
+	                            extract(year from p.inicio ) as ano
+                            from
+	                            prova p
+                            where
+	                            p.id = @provaId";
+
+                return await conn.QueryFirstOrDefaultAsync<int?>(query, new { provaId });
+            }
+            finally
+            {
+                conn.Close();
+                conn.Dispose();
+            }
+        }
     }
 }

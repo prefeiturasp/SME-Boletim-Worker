@@ -19,6 +19,7 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.Queries
                 AlunoMatricula = alunoMatricula,
                 AreaConhecimentoID = areaDoConhecimento,
                 Edicao = edicao.ToString(),
+                NivelProficiencia = 2,
                 Valor = 300.5M,
             };
 
