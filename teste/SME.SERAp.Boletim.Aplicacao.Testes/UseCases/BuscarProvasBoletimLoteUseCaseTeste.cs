@@ -64,6 +64,25 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.UseCases
             mediator.Verify(m => m.Send(It.IsAny<PublicaFilaRabbitCommand>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
+        [Fact]
+        public async Task Deve_Retornar_False_Caso_Excecao()
+        {
+            var mensagemRabbit = new MensagemRabbit(string.Empty, Guid.NewGuid());
+
+            mediator.Setup(m => m.Send(It.IsAny<ObterBoletimLoteProvaPendentesQuery>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new Exception("erro teste"));
+
+            mediator.Setup(m => m.Send(It.IsAny<AlterarLoteProvaStatusConsolidacaoCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(1);
+
+            var resultado = await buscarProvasBoletimLoteUseCase.Executar(mensagemRabbit);
+
+            Assert.False(resultado);
+
+            mediator.Verify(m => m.Send(It.IsAny<PublicaFilaRabbitCommand>(), It.IsAny<CancellationToken>()), Times.Never);
+            serviceLog.Verify(m => m.Registrar(It.IsAny<Exception>()), Times.Once);
+        }
+
         private static List<BoletimLoteProva> ObterBoletisLotesProvas()
         {
             return new List<BoletimLoteProva>

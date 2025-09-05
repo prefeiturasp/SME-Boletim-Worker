@@ -1,13 +1,9 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Moq;
-using Xunit;
+﻿using Moq;
 using SME.SERAp.Boletim.Aplicacao.Queries;
 using SME.SERAp.Boletim.Dados.Interfaces;
 using SME.SERAp.Boletim.Infra.Dtos;
 
-namespace SME.SERAp.Boletim.Aplicacao.Testes.Queries.ObterUesAlunosRealizaramProva
+namespace SME.SERAp.Boletim.Aplicacao.Testes.Queries
 {
     public class ObterUesAlunosRealizaramProvaQueryHandlerTests
     {

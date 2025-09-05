@@ -31,7 +31,7 @@ namespace SME.SERAp.Boletim.Dados.Repositories.Elastic
             _ = CriarIndexAsync().Result;
         }
 
-        public async Task<bool> CriarIndexAsync()
+        public virtual async Task<bool> CriarIndexAsync()
         {
             if (!(await elasticClient.Indices.ExistsAsync(IndexName)).Exists)
             {

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Xunit;
 using SME.SERAp.Boletim.Aplicacao.Commands.CalcularProbabilidade;
 
-namespace SME.SERAp.Boletim.Dominio.Teste.Commands
+namespace SME.SERAp.Boletim.Aplicacao.Testes.Commands
 {
     public class CalcularProbabilidadeCommandHandlerTeste
     {
@@ -21,7 +21,7 @@ namespace SME.SERAp.Boletim.Dominio.Teste.Commands
 
             var resultado = await handler.Handle(command, CancellationToken.None);
 
-            var esperado = acertoCasual + ((1 - acertoCasual) * (1 / (1 + Math.Exp(-1.7 * discriminacao * (proficiencia - dificuldade)))));
+            var esperado = acertoCasual + (1 - acertoCasual) * (1 / (1 + Math.Exp(-1.7 * discriminacao * (proficiencia - dificuldade))));
 
             Assert.Equal(esperado, resultado, 5);
         }

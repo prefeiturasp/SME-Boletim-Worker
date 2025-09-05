@@ -7,7 +7,7 @@ using SME.SERAp.Boletim.Dados.Interfaces;
 using SME.SERAp.Boletim.Dominio.Enums;
 using Xunit;
 
-namespace SME.SERAp.Boletim.Dominio.Teste.Commands
+namespace SME.SERAp.Boletim.Aplicacao.Testes.Commands
 {
     public class AlterarLoteProvaStatusConsolidacaoCommandHandlerTeste
     {
