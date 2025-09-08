@@ -26,10 +26,10 @@ namespace SME.SERAp.Boletim.Aplicacao.UseCases
                     throw new Exception("Mensagem inválida.");
 
                 var alunoProvaSpProficienciaExistente = await mediator
-                    .Send(new ObterAlunoProvaSpProficienciaQuery(alunoProvaSpProficiencia.AnoLetivo, alunoProvaSpProficiencia.DisciplinaId, alunoProvaSpProficiencia.AnoEscolar));
+                    .Send(new ObterAlunoProvaSpProficienciaQuery(alunoProvaSpProficiencia.AnoLetivo, alunoProvaSpProficiencia.DisciplinaId, alunoProvaSpProficiencia.AlunoRa));
 
                 if(alunoProvaSpProficienciaExistente is not null)
-                    await mediator.Send(new ExcluirAlunoProvaSpProficienciaCommand(alunoProvaSpProficiencia.AnoLetivo, alunoProvaSpProficiencia.DisciplinaId, alunoProvaSpProficiencia.AnoEscolar));
+                    await mediator.Send(new ExcluirAlunoProvaSpProficienciaCommand(alunoProvaSpProficiencia.AnoLetivo, alunoProvaSpProficiencia.DisciplinaId, alunoProvaSpProficiencia.AlunoRa));
 
                 await mediator.Send(new InserirAlunoProvaSpProficienciaCommand(alunoProvaSpProficiencia));
                 return true;
