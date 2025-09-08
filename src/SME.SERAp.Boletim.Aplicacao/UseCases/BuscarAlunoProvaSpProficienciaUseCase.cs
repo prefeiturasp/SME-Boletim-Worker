@@ -21,45 +21,37 @@ namespace SME.SERAp.Boletim.Aplicacao.UseCases
 
         public async Task<bool> Executar(MensagemRabbit mensagemRabbit)
         {
-            try
-            {
-                var boletimProvaAluno = mensagemRabbit.ObterObjetoMensagem<BoletimProvaAluno>();
-                if (boletimProvaAluno is null)
-                    throw new Exception("Mensagem inválida.");
+            var boletimProvaAluno = mensagemRabbit.ObterObjetoMensagem<BoletimProvaAluno>();
+            if (boletimProvaAluno is null)
+                throw new Exception("Mensagem inválida.");
 
-                var areaDoConhecimentoId = ObterAreaDoConhecimento(boletimProvaAluno.DisciplinaId);
-                var alunoMatricula = boletimProvaAluno.AlunoRa.ToString();
-                var edicaoProvaSp = await ObterEdicaoProvaSp(boletimProvaAluno.ProvaId);
+            var areaDoConhecimentoId = ObterAreaDoConhecimento(boletimProvaAluno.DisciplinaId);
+            var alunoMatricula = boletimProvaAluno.AlunoRa.ToString();
+            var edicaoProvaSp = await ObterEdicaoProvaSp(boletimProvaAluno.ProvaId);
 
-                var ResultadoAlunoProvaSp = await mediator
-                    .Send(new ObterResultadoAlunoProvaSpQuery(edicaoProvaSp, areaDoConhecimentoId, alunoMatricula));
+            var ResultadoAlunoProvaSp = await mediator
+                .Send(new ObterResultadoAlunoProvaSpQuery(edicaoProvaSp, areaDoConhecimentoId, alunoMatricula));
 
-                if (ResultadoAlunoProvaSp is null)
-                    return true;
-
-                var anoEscolar = ResultadoAlunoProvaSp.AnoEscolar?.ConverterParaInt() ?? 0; 
-                var anoLetivo = ResultadoAlunoProvaSp.Edicao?.ConverterParaInt() ?? 0; 
-
-                var alunoProvaSpProficiencia = new AlunoProvaSpProficiencia
-                {
-                    AlunoRa = boletimProvaAluno.AlunoRa,
-                    DisciplinaId = boletimProvaAluno.DisciplinaId,
-                    AnoEscolar = anoEscolar,
-                    AnoLetivo = anoLetivo,
-                    NivelProficiencia = ResultadoAlunoProvaSp.NivelProficiencia,
-                    Proficiencia = ResultadoAlunoProvaSp.Valor,
-                    DataAtualizacao = DateTime.Now
-                };
-
-                await mediator.Send(new PublicaFilaRabbitCommand(RotasRabbit.TratarAlunoProvaSpProficiencia, alunoProvaSpProficiencia));
-
+            if (ResultadoAlunoProvaSp is null)
                 return true;
-            }
-            catch (Exception ex)
+
+            var anoEscolar = ResultadoAlunoProvaSp.AnoEscolar?.ConverterParaInt() ?? 0;
+            var anoLetivo = ResultadoAlunoProvaSp.Edicao?.ConverterParaInt() ?? 0;
+
+            var alunoProvaSpProficiencia = new AlunoProvaSpProficiencia
             {
-                servicoLog.Registrar(ex);
-                return false;
-            }
+                AlunoRa = boletimProvaAluno.AlunoRa,
+                DisciplinaId = boletimProvaAluno.DisciplinaId,
+                AnoEscolar = anoEscolar,
+                AnoLetivo = anoLetivo,
+                NivelProficiencia = ResultadoAlunoProvaSp.NivelProficiencia,
+                Proficiencia = ResultadoAlunoProvaSp.Valor,
+                DataAtualizacao = DateTime.Now
+            };
+
+            await mediator.Send(new PublicaFilaRabbitCommand(RotasRabbit.TratarAlunoProvaSpProficiencia, alunoProvaSpProficiencia));
+
+            return true;
         }
 
         private async Task<int> ObterEdicaoProvaSp(long provaId)
