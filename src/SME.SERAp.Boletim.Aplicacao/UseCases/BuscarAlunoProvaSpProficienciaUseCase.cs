@@ -33,7 +33,7 @@ namespace SME.SERAp.Boletim.Aplicacao.UseCases
                 .Send(new ObterResultadoAlunoProvaSpQuery(edicaoProvaSp, areaDoConhecimentoId, alunoMatricula));
 
             if (ResultadoAlunoProvaSp is null)
-                return true;
+                throw new Exception($"Não foi possível obter o resultado da Prova SP. AlunoRa: {boletimProvaAluno.AlunoRa}, ProvaId: {boletimProvaAluno.ProvaId}, DisciplinaId: {boletimProvaAluno.DisciplinaId}");
 
             var anoEscolar = ResultadoAlunoProvaSp.AnoEscolar?.ConverterParaInt() ?? 0;
             var anoLetivo = ResultadoAlunoProvaSp.Edicao?.ConverterParaInt() ?? 0;
