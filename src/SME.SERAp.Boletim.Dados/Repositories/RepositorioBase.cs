@@ -1,9 +1,9 @@
 ﻿using Dommel;
-using Microsoft.Data.SqlClient;
 using Npgsql;
 using SME.SERAp.Boletim.Dominio.Entities;
 using SME.SERAp.Boletim.Infra.EnvironmentVariables;
 using System.Data;
+using System.Data.SqlClient;
 
 namespace SME.SERAp.Boletim.Dados.Repositories
 {
