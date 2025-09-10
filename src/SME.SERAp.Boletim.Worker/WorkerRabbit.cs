@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Amazon.Runtime.Internal.Util;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
@@ -246,6 +247,8 @@ namespace SME.SERAp.Boletim.Worker
                 catch (Exception ex)
                 {
                     servicoTelemetria.RegistrarExcecao(transacao, ex);
+
+                    logger.LogError(ex.Message);
 
                     var rejeicoes = GetRetryCount(ea.BasicProperties);
 
