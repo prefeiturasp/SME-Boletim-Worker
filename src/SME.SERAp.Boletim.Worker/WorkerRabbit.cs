@@ -242,9 +242,6 @@ namespace SME.SERAp.Boletim.Worker
                 catch (Exception ex)
                 {
                     servicoTelemetria.RegistrarExcecao(transacao, ex);
-
-                    logger.LogError(ex.Message);
-
                     var rejeicoes = GetRetryCount(ea.BasicProperties);
 
                     if (++rejeicoes >= comandoRabbit.QuantidadeReprocessamentoDeadLetter)
