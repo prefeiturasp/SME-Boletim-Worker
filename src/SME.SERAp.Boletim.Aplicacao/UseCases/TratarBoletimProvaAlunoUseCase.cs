@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using RabbitMQ.Client;
 using SME.SERAp.Boletim.Aplicacao.Commands.PublicaFilaRabbit;
+using SME.SERAp.Boletim.Aplicacao.Commands.PublicarFilaRabbitSerapEstudante;
 using SME.SERAp.Boletim.Aplicacao.Interfaces;
 using SME.SERAp.Boletim.Aplicacao.Queries.ObterBoletimProvaAlunoPorProvaIdAlunoRaAnoEscolar;
 using SME.SERAp.Boletim.Aplicacao.Queries.ObterQuantidadeMensagensPorNomeFila;
@@ -60,7 +61,7 @@ namespace SME.SERAp.Boletim.Aplicacao.UseCases
 
         private async Task BuscarAlunoProvaSpProficiencia(BoletimProvaAluno boletimProvaAluno)
         {
-            await mediator.Send(new PublicaFilaRabbitCommand(RotasRabbit.BuscarAlunoProvaSpProficiencia, boletimProvaAluno));
+            await mediator.Send(new PublicarFilaRabbitSerapEstudanteCommand(RotasRabbit.BuscarAlunoProvaSpProficiencia, boletimProvaAluno));
         }
 
         private async Task ConsolidarBoletim(AlunoProvaProficienciaBoletimDto alunoProvaProficienciaBoletimDto)
