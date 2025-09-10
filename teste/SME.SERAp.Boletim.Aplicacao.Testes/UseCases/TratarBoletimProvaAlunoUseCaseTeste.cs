@@ -2,6 +2,7 @@
 using Moq;
 using RabbitMQ.Client;
 using SME.SERAp.Boletim.Aplicacao.Commands.PublicaFilaRabbit;
+using SME.SERAp.Boletim.Aplicacao.Commands.PublicarFilaRabbitSerapEstudante;
 using SME.SERAp.Boletim.Aplicacao.Interfaces;
 using SME.SERAp.Boletim.Aplicacao.Queries.ObterBoletimProvaAlunoPorProvaIdAlunoRaAnoEscolar;
 using SME.SERAp.Boletim.Aplicacao.Queries.ObterQuantidadeMensagensPorNomeFila;
@@ -72,7 +73,7 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.UseCases
             ), default), Times.Once);
 
             mediator.Verify(m => m.Send(It.IsAny<ExcluirBoletimProvaAlunoCommand>(), It.IsAny<CancellationToken>()), Times.Exactly(boletinsProvasAlunosPorProvaIdAlunoRaAnoEscola.Count));
-            mediator.Verify(m => m.Send(It.Is<PublicaFilaRabbitCommand>(cmd => cmd.NomeFila == RotasRabbit.BuscarAlunoProvaSpProficiencia), It.IsAny<CancellationToken>()), Times.Once);
+            mediator.Verify(m => m.Send(It.Is<PublicarFilaRabbitSerapEstudanteCommand>(cmd => cmd.NomeFila == RotasRabbit.BuscarAlunoProvaSpProficiencia), It.IsAny<CancellationToken>()), Times.Once);
             consolidarBoletimEscolarUseCase.Verify(c => c.Executar(It.IsAny<long>(), It.IsAny<int>()), Times.Never);
         }
 
@@ -115,7 +116,7 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.UseCases
             ), default), Times.Once);
 
             mediator.Verify(m => m.Send(It.IsAny<ExcluirBoletimProvaAlunoCommand>(), It.IsAny<CancellationToken>()), Times.Never);
-            mediator.Verify(m => m.Send(It.Is<PublicaFilaRabbitCommand>(cmd => cmd.NomeFila == RotasRabbit.BuscarAlunoProvaSpProficiencia), It.IsAny<CancellationToken>()), Times.Once);
+            mediator.Verify(m => m.Send(It.Is<PublicarFilaRabbitSerapEstudanteCommand>(cmd => cmd.NomeFila == RotasRabbit.BuscarAlunoProvaSpProficiencia), It.IsAny<CancellationToken>()), Times.Once);
             consolidarBoletimEscolarUseCase.Verify(c => c.Executar(It.IsAny<long>(), It.IsAny<int>()), Times.Never);
         }
 
@@ -140,7 +141,7 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.UseCases
             Assert.True(resultado);
             mediator.Verify(m => m.Send(It.IsAny<InserirBoletimProvaAlunoCommand>(), It.IsAny<CancellationToken>()), Times.Never);
             mediator.Verify(m => m.Send(It.IsAny<ExcluirBoletimProvaAlunoCommand>(), It.IsAny<CancellationToken>()), Times.Never);
-            mediator.Verify(m => m.Send(It.Is<PublicaFilaRabbitCommand>(cmd => cmd.NomeFila == RotasRabbit.BuscarAlunoProvaSpProficiencia), It.IsAny<CancellationToken>()), Times.Never);
+            mediator.Verify(m => m.Send(It.Is<PublicarFilaRabbitSerapEstudanteCommand>(cmd => cmd.NomeFila == RotasRabbit.BuscarAlunoProvaSpProficiencia), It.IsAny<CancellationToken>()), Times.Never);
             consolidarBoletimEscolarUseCase.Verify(c => c.Executar(It.IsAny<long>(), It.IsAny<int>()), Times.Never);
         }
 
@@ -168,7 +169,7 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.UseCases
             Assert.False(resultado);
             serviceLog.Verify(x => x.Registrar(It.IsAny<Exception>()), Times.Once);
             consolidarBoletimEscolarUseCase.Verify(c => c.Executar(It.IsAny<long>(), It.IsAny<int>()), Times.Never);
-            mediator.Verify(m => m.Send(It.Is<PublicaFilaRabbitCommand>(cmd => cmd.NomeFila == RotasRabbit.BuscarAlunoProvaSpProficiencia), It.IsAny<CancellationToken>()), Times.Never);
+            mediator.Verify(m => m.Send(It.Is<PublicarFilaRabbitSerapEstudanteCommand>(cmd => cmd.NomeFila == RotasRabbit.BuscarAlunoProvaSpProficiencia), It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [Fact]
@@ -211,7 +212,7 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.UseCases
             ), default), Times.Once);
 
             mediator.Verify(m => m.Send(It.IsAny<ExcluirBoletimProvaAlunoCommand>(), It.IsAny<CancellationToken>()), Times.Exactly(boletinsProvasAlunosPorProvaIdAlunoRaAnoEscola.Count));
-            mediator.Verify(m => m.Send(It.Is<PublicaFilaRabbitCommand>(cmd => cmd.NomeFila == RotasRabbit.BuscarAlunoProvaSpProficiencia), It.IsAny<CancellationToken>()), Times.Once);
+            mediator.Verify(m => m.Send(It.Is<PublicarFilaRabbitSerapEstudanteCommand>(cmd => cmd.NomeFila == RotasRabbit.BuscarAlunoProvaSpProficiencia), It.IsAny<CancellationToken>()), Times.Once);
             consolidarBoletimEscolarUseCase.Verify(c => c.Executar(It.IsAny<long>(), It.IsAny<int>()), Times.Once);
         }
 
