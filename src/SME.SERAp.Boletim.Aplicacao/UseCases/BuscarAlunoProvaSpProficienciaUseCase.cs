@@ -21,37 +21,45 @@ namespace SME.SERAp.Boletim.Aplicacao.UseCases
 
         public async Task<bool> Executar(MensagemRabbit mensagemRabbit)
         {
-            var boletimProvaAluno = mensagemRabbit.ObterObjetoMensagem<BoletimProvaAluno>();
-            if (boletimProvaAluno is null)
-                throw new Exception("Mensagem inválida.");
-
-            var areaDoConhecimentoId = ObterAreaDoConhecimento(boletimProvaAluno.DisciplinaId);
-            var alunoMatricula = boletimProvaAluno.AlunoRa.ToString();
-            var edicaoProvaSp = await ObterEdicaoProvaSp(boletimProvaAluno.ProvaId);
-
-            var ResultadoAlunoProvaSp = await mediator
-                .Send(new ObterResultadoAlunoProvaSpQuery(edicaoProvaSp, areaDoConhecimentoId, alunoMatricula));
-
-            if (ResultadoAlunoProvaSp is null)
-                throw new Exception($"Não foi possível obter o resultado da Prova SP. AlunoRa: {boletimProvaAluno.AlunoRa}, ProvaId: {boletimProvaAluno.ProvaId}, DisciplinaId: {boletimProvaAluno.DisciplinaId}");
-
-            var anoEscolar = ResultadoAlunoProvaSp.AnoEscolar?.ConverterParaInt() ?? 0;
-            var anoLetivo = ResultadoAlunoProvaSp.Edicao?.ConverterParaInt() ?? 0;
-
-            var alunoProvaSpProficiencia = new AlunoProvaSpProficiencia
+            try
             {
-                AlunoRa = boletimProvaAluno.AlunoRa,
-                DisciplinaId = boletimProvaAluno.DisciplinaId,
-                AnoEscolar = anoEscolar,
-                AnoLetivo = anoLetivo,
-                NivelProficiencia = ResultadoAlunoProvaSp.NivelProficiencia,
-                Proficiencia = ResultadoAlunoProvaSp.Valor,
-                DataAtualizacao = DateTime.Now
-            };
+                var boletimProvaAluno = mensagemRabbit.ObterObjetoMensagem<BoletimProvaAluno>();
+                if (boletimProvaAluno is null)
+                    throw new Exception("Mensagem inválida.");
 
-            await mediator.Send(new PublicaFilaRabbitCommand(RotasRabbit.TratarAlunoProvaSpProficiencia, alunoProvaSpProficiencia));
+                var areaDoConhecimentoId = ObterAreaDoConhecimento(boletimProvaAluno.DisciplinaId);
+                var alunoMatricula = boletimProvaAluno.AlunoRa.ToString();
+                var edicaoProvaSp = await ObterEdicaoProvaSp(boletimProvaAluno.ProvaId);
 
-            return true;
+                var ResultadoAlunoProvaSp = await mediator
+                    .Send(new ObterResultadoAlunoProvaSpQuery(edicaoProvaSp, areaDoConhecimentoId, alunoMatricula));
+
+                if (ResultadoAlunoProvaSp is null)
+                    return true;
+
+                var anoEscolar = ResultadoAlunoProvaSp.AnoEscolar?.ConverterParaInt() ?? 0;
+                var anoLetivo = ResultadoAlunoProvaSp.Edicao?.ConverterParaInt() ?? 0;
+
+                var alunoProvaSpProficiencia = new AlunoProvaSpProficiencia
+                {
+                    AlunoRa = boletimProvaAluno.AlunoRa,
+                    DisciplinaId = boletimProvaAluno.DisciplinaId,
+                    AnoEscolar = anoEscolar,
+                    AnoLetivo = anoLetivo,
+                    NivelProficiencia = ResultadoAlunoProvaSp.NivelProficiencia,
+                    Proficiencia = ResultadoAlunoProvaSp.Valor,
+                    DataAtualizacao = DateTime.Now
+                };
+
+                await mediator.Send(new PublicaFilaRabbitCommand(RotasRabbit.TratarAlunoProvaSpProficiencia, alunoProvaSpProficiencia));
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                servicoLog.Registrar(ex);
+                return false;
+            }
         }
 
         private async Task<int> ObterEdicaoProvaSp(long provaId)
