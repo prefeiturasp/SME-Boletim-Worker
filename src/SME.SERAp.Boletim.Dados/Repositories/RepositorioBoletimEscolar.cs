@@ -41,11 +41,6 @@ namespace SME.SERAp.Boletim.Dados.Repositories
 
                 return await conn.ExecuteAsync(query, new { provaId });
             }
-
-            catch (Exception ex)
-            {
-                throw;
-            }
             finally
             {
                 conn.Close();

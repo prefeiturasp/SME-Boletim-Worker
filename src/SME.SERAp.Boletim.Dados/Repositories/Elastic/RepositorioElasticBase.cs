@@ -79,7 +79,7 @@ namespace SME.SERAp.Boletim.Dados.Repositories.Elastic
             return true;
         }
 
-        public async Task<TEntidade> ObterPorIdAsync(string id)
+        public virtual async Task<TEntidade> ObterPorIdAsync(string id)
         {
             var response = await elasticClient.GetAsync(DocumentPath<TEntidade>.Id(id).Index(IndexName));
 
@@ -88,7 +88,7 @@ namespace SME.SERAp.Boletim.Dados.Repositories.Elastic
             return response.Source;
         }
 
-        public async Task<IEnumerable<TEntidade>> ObterTodosAsync()
+        public virtual async Task<IEnumerable<TEntidade>> ObterTodosAsync()
         {
             var search = new SearchDescriptor<TEntidade>(IndexName)
                 .Size(10000)

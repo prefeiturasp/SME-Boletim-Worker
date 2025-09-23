@@ -5,6 +5,13 @@ namespace SME.SERAp.Boletim.Infra.Testes.Fila
 {
     public class MensagemRabbitTeste
     {
+        private class MensagemRabbitFake : MensagemRabbit
+        {
+            public MensagemRabbitFake() : base()
+            {
+            }
+        }
+
         private class ClasseTeste
         {
             public int Id { get; set; }
@@ -21,6 +28,16 @@ namespace SME.SERAp.Boletim.Infra.Testes.Fila
 
             Assert.Equal(mensagem, mensagemRabbit.Mensagem);
             Assert.Equal(codigo, mensagemRabbit.CodigoCorrelacao);
+        }
+
+        [Fact]
+        public void Deve_Permitir_Criar_Instancia_Com_Construtor_Protegido()
+        {
+            var instancia = new MensagemRabbitFake();
+
+            Assert.NotNull(instancia);
+            Assert.Null(instancia.Mensagem);
+            Assert.Equal(Guid.Empty, instancia.CodigoCorrelacao);
         }
 
         [Fact]

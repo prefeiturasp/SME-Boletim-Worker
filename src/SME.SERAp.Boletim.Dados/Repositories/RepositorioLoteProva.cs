@@ -28,11 +28,6 @@ namespace SME.SERAp.Boletim.Dados.Repositories
 
                 return await conn.ExecuteAsync(query);
             }
-
-            catch (Exception ex)
-            {
-                throw;
-            }
             finally
             {
                 conn.Close();
@@ -63,11 +58,6 @@ namespace SME.SERAp.Boletim.Dados.Repositories
 
                 return await conn.QueryAsync<LoteProva>(query, new {inicio, fim, formatoTai });
             }
-
-            catch (Exception ex)
-            {
-                throw;
-            }
             finally
             {
                 conn.Close();
@@ -92,11 +82,6 @@ namespace SME.SERAp.Boletim.Dados.Repositories
                     query += " and status_consolidacao not in (1,2)";
 
                 return await conn.ExecuteAsync(query, new { idLotProva, loteStatusConsolidacao });
-            }
-
-            catch (Exception ex)
-            {
-                throw;
             }
             finally
             {
@@ -135,11 +120,6 @@ namespace SME.SERAp.Boletim.Dados.Repositories
 	                            and p.formato_tai";
 
                 return await conn.QueryAsync<ProvaDto>(query, new { loteId });
-            }
-
-            catch (Exception ex)
-            {
-                throw;
             }
             finally
             {

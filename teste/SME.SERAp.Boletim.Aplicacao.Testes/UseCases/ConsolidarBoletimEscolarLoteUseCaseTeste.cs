@@ -7,6 +7,7 @@ using SME.SERAp.Boletim.Dominio.Enums;
 
 namespace SME.SERAp.Boletim.Aplicacao.Testes.UseCases
 {
+    [Collection("ColecaoMapeamentos")]
     public class ConsolidarBoletimEscolarLoteUseCaseTeste
     {
         private readonly Mock<IMediator> mediator;

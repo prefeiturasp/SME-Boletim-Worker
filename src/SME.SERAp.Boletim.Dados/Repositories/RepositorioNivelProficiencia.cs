@@ -31,11 +31,6 @@ namespace SME.SERAp.Boletim.Dados.Repositories
 
                 return await conn.QueryAsync<NivelProficiencia>(query, new { disciplinaId, anoEscolar });
             }
-
-            catch (Exception ex)
-            {
-                throw;
-            }
             finally
             {
                 conn.Close();
