@@ -76,5 +76,39 @@ namespace SME.SERAp.Boletim.Infra.Testes.Services
                 s.RegistrarAsync(It.IsAny<Func<Task>>(), "acaoTeste", "rotaTeste", string.Empty),
                 Times.Once);
         }
+
+        [Fact]
+        public async Task Deve_Executar_PublicarMensagem_E_Tratar_Erro()
+        {
+            var mensagem = new MensagemRabbit(new { Texto = "Teste" }, Guid.NewGuid());
+            Func<Task> capturedAction = null;
+
+            policy.Setup(p => p.ExecuteAsync(It.IsAny<Func<Task>>()))
+                  .Returns<Func<Task>>(f => f());
+
+            servicoTelemetria
+                .Setup(s => s.RegistrarAsync(It.IsAny<Func<Task>>(), "acaoTeste", "rotaTeste", string.Empty))
+                .Callback<Func<Task>, string, string, string>((func, _, _, _) =>
+                {
+                    capturedAction = func;
+                })
+                .Returns(Task.CompletedTask);
+
+            await servicoMensageria.Publicar(mensagem, "rotaTeste", "exchangeTeste", "acaoTeste");
+
+            if (capturedAction != null)
+                await capturedAction();
+
+            logger.Verify(
+                l => l.Log(
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, _) => v.ToString().Contains("Erro ao publicar mensagem")),
+                    It.IsAny<Exception>(),
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()
+                ),
+                Times.AtLeastOnce
+            );
+        }
     }
 }

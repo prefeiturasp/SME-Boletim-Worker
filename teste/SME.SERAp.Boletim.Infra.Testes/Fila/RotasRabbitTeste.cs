@@ -27,6 +27,10 @@ namespace SME.SERAp.Boletim.Infra.Testes.Fila
             Assert.Equal("serap.boletim.buscar.turmas.resultado.probabilidade.prova", RotasRabbit.BuscarTurmasBoletimResultadoProbabilidadeProva);
             Assert.Equal("serap.boletim.tratar.turma.resultado.probabilidade.prova", RotasRabbit.TratarTurmaBoletimResultadoProbabilidadeProva);
             Assert.Equal("serap.boletim.tratar.resultado.probabilidade.prova", RotasRabbit.TratarBoletimResultadoProbabilidadeProva);
+
+            Assert.Equal("serap.boletim.buscar.aluno.prova.sp.proficiencia", RotasRabbit.BuscarAlunoProvaSpProficiencia);
+            Assert.Equal("serap.boletim.tratar.aluno.prova.sp.proficiencia", RotasRabbit.TratarAlunoProvaSpProficiencia);
+            Assert.Equal("serap.boletim.buscar.prova.alunos.prova.sp.proficiencia", RotasRabbit.BuscarProvaAlunosProvaSpProficiencia);
         }
     }
 }
