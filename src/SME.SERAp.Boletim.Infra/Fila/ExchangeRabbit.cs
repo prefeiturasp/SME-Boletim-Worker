@@ -9,6 +9,7 @@ namespace SME.SERAp.Boletim.Infra.Fila
     public static class ExchangeRabbit
     {
         public static string SerapBoletim => "serap.boletim.workers";
+        public static string SerapEstudante => "serap.estudante.workers";
         public static string Serap => "serap.workers";
         public static string SerapBoletimDeadLetter => "serap.boletim.workers.deadletter";
         public static string Logs => "EnterpriseApplicationLog";

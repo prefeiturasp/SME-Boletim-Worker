@@ -6,7 +6,7 @@ using SME.SERAp.Boletim.Aplicacao;
 using SME.SERAp.Boletim.Dados.Interfaces;
 using Xunit;
 
-namespace SME.SERAp.Boletim.Dominio.Teste.Commands
+namespace SME.SERAp.Boletim.Aplicacao.Testes.Commands
 {
     public class DesativarTodosLotesProvaAtivosCommandHandlerTeste
     {

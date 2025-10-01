@@ -23,5 +23,9 @@
         public const string BuscarTurmasBoletimResultadoProbabilidadeProva = "serap.boletim.buscar.turmas.resultado.probabilidade.prova";
         public const string TratarTurmaBoletimResultadoProbabilidadeProva = "serap.boletim.tratar.turma.resultado.probabilidade.prova";
         public const string TratarBoletimResultadoProbabilidadeProva = "serap.boletim.tratar.resultado.probabilidade.prova";
+
+        public static string BuscarAlunoProvaSpProficiencia => "serap.boletim.buscar.aluno.prova.sp.proficiencia";
+        public static string TratarAlunoProvaSpProficiencia => "serap.boletim.tratar.aluno.prova.sp.proficiencia";
+        public static string BuscarProvaAlunosProvaSpProficiencia => "serap.boletim.buscar.prova.alunos.prova.sp.proficiencia";
     }
 }

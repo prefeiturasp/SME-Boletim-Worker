@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using Moq;
+using Nest;
 using RabbitMQ.Client;
 using SME.SERAp.Boletim.Aplicacao.Commands.PublicaFilaRabbit;
+using SME.SERAp.Boletim.Aplicacao.Interfaces;
 using SME.SERAp.Boletim.Aplicacao.Queries.ObterAlunosProvaProficienciaBoletimPorProvaId;
 using SME.SERAp.Boletim.Aplicacao.Queries.ObterProvaPorId;
 using SME.SERAp.Boletim.Aplicacao.UseCases;
@@ -47,6 +49,7 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.UseCases
             mediator.Verify(m => m.Send(It.IsAny<PublicaFilaRabbitCommand>(), It.IsAny<CancellationToken>()), Times.Exactly(alunosProvasProficienciaBoletimDtos.Count));
         }
 
+
         [Fact]
         public async Task Nao_Deve_Publicar_Tratar_Boletim_ProvaAluno()
         {
@@ -64,6 +67,40 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.UseCases
 
             Assert.True(resultado);
             mediator.Verify(m => m.Send(It.IsAny<PublicaFilaRabbitCommand>(), It.IsAny<CancellationToken>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task Deve_Retornar_False_Caso_Mensagem_For_Nula()
+        {
+            var mensagemRabbit = new MensagemRabbit(string.Empty, Guid.NewGuid());
+            mediator.Setup(m => m.Send(It.IsAny<ObterProvaPorIdQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((Prova)null!);
+
+            mediator.Setup(m => m.Send(It.IsAny<ObterAlunosProvaProficienciaBoletimPorProvaIdQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((List<AlunoProvaProficienciaBoletimDto>)null!);
+
+            var resultado = await buscarAlunosProvaProficienciaBoletimUseCase.Executar(mensagemRabbit);
+
+            Assert.False(resultado);
+            mediator.Verify(m => m.Send(It.IsAny<PublicaFilaRabbitCommand>(), It.IsAny<CancellationToken>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task Deve_Retornar_False_Caso_Ocorra_Excecao()
+        {
+            var provaFinalizadaDto = ObterProvaFinalizadaDto();
+            var mensagemRabbit = new MensagemRabbit(JsonSerializer.Serialize(provaFinalizadaDto), Guid.NewGuid());
+            mediator.Setup(m => m.Send(It.IsAny<ObterProvaPorIdQuery>(), It.IsAny<CancellationToken>()))
+                .Throws(new Exception("teste exceção"));
+
+            mediator.Setup(m => m.Send(It.IsAny<ObterAlunosProvaProficienciaBoletimPorProvaIdQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((List<AlunoProvaProficienciaBoletimDto>)null!);
+
+            var resultado = await buscarAlunosProvaProficienciaBoletimUseCase.Executar(mensagemRabbit);
+            Assert.False(resultado);
+
+            mediator.Verify(m => m.Send(It.IsAny<PublicaFilaRabbitCommand>(), It.IsAny<CancellationToken>()), Times.Never);
+            serviceLog.Verify(m => m.Registrar(It.IsAny<Exception>()), Times.Once);
         }
 
         private static ProvaDto ObterProvaFinalizadaDto()

@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Moq;
-using Xunit;
+﻿using Moq;
 using SME.SERAp.Boletim.Aplicacao.Queries.ObterBoletimProvaAlunoPorProvaIdAlunoRaAnoEscolar;
 using SME.SERAp.Boletim.Dados.Interfaces;
 using SME.SERAp.Boletim.Dominio.Entities;
 
-namespace SME.SERAp.Boletim.Dominio.Teste.Queries
+namespace SME.SERAp.Boletim.Aplicacao.Testes.Queries
 {
     public class ObterBoletimProvaAlunoPorProvaIdAlunoRaAnoEscolarQueryHandlerTeste
     {

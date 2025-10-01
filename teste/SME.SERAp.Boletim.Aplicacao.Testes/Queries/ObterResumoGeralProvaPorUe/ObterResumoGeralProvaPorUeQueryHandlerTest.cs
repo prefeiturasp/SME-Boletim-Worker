@@ -1,12 +1,9 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Moq;
-using Xunit;
+﻿using Moq;
 using SME.SERAp.Boletim.Aplicacao.Queries.Elastic.ObterResumoGeralProvaPorUe;
 using SME.SERAp.Boletim.Dados.Interfaces.Elastic;
 using SME.SERAp.Boletim.Infra.Dtos.Elastic;
 
-namespace SME.SERAp.Boletim.Aplicacao.Testes.Queries.ObterResumoGeralProvaPorUe
+namespace SME.SERAp.Boletim.Aplicacao.Testes.Queries
 {
     public class ObterResumoGeralProvaPorUeQueryHandlerTests
     {

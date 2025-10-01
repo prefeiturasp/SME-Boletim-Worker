@@ -1,13 +1,9 @@
 ﻿using Dommel;
+using Microsoft.Data.SqlClient;
 using Npgsql;
 using SME.SERAp.Boletim.Dominio.Entities;
 using SME.SERAp.Boletim.Infra.EnvironmentVariables;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SME.SERAp.Boletim.Dados.Repositories
 {
@@ -20,7 +16,7 @@ namespace SME.SERAp.Boletim.Dados.Repositories
             this.connectionStrings = connectionStrings ?? throw new ArgumentNullException(nameof(connectionStrings));
         }
 
-        protected IDbConnection ObterConexao()
+        protected virtual IDbConnection ObterConexao()
         {
             var conexao = new NpgsqlConnection(connectionStrings.ApiSerap);
             conexao.Open();
@@ -41,7 +37,7 @@ namespace SME.SERAp.Boletim.Dados.Repositories
             }
         }
 
-        protected IDbConnection ObterConexaoLeitura()
+        protected virtual IDbConnection ObterConexaoLeitura()
         {
             var conexao = new NpgsqlConnection(connectionStrings.ApiSerapLeitura);
             conexao.Open();
@@ -51,6 +47,13 @@ namespace SME.SERAp.Boletim.Dados.Repositories
         protected IDbConnection ObterConexaoSgp()
         {
             var conexao = new NpgsqlConnection(connectionStrings.ApiSgp);
+            conexao.Open();
+            return conexao;
+        }
+
+        protected virtual IDbConnection ObterConexaoProvaSp()
+        {
+            var conexao = new SqlConnection(connectionStrings.ProvaSP);
             conexao.Open();
             return conexao;
         }

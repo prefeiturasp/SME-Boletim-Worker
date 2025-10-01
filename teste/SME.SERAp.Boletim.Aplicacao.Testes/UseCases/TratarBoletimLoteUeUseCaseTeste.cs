@@ -57,5 +57,23 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.UseCases
             mediator.Verify(m => m.Send(It.IsAny<InserirBoletimLoteUeCommand>(), It.IsAny<CancellationToken>()), Times.Never);
             serviceLog.Verify(x => x.Registrar(It.IsAny<Exception>()), Times.Never);
         }
+
+        [Fact]
+        public async Task Deve_Retornar_False_Caso_Excecao()
+        {
+            var boletimLoteUe = new BoletimLoteUe { LoteId = 1, UeId = 2, AnoEscolar = 5, DreId = 3, TotalAlunos = 10, RealizaramProva = 8 };
+            var mensagemRabbit = new MensagemRabbit(JsonSerializer.Serialize(boletimLoteUe), Guid.NewGuid());
+
+            mediator.Setup(m => m.Send(It.IsAny<ExcluirBoletimLoteUeCommand>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new Exception("Erro teste"));
+            mediator.Setup(m => m.Send(It.IsAny<InserirBoletimLoteUeCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(0);
+
+            var resultado = await tratarBoletimLoteUeUseCase.Executar(mensagemRabbit);
+            Assert.False(resultado);
+            mediator.Verify(m => m.Send(It.IsAny<ExcluirBoletimLoteUeCommand>(), It.IsAny<CancellationToken>()), Times.Once);
+            mediator.Verify(m => m.Send(It.IsAny<InserirBoletimLoteUeCommand>(), It.IsAny<CancellationToken>()), Times.Never);
+            serviceLog.Verify(x => x.Registrar(It.IsAny<Exception>()), Times.Once);
+        }
     }
 }
