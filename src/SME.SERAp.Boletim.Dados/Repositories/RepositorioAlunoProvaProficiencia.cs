@@ -64,7 +64,7 @@ namespace SME.SERAp.Boletim.Dados.Repositories
                     WHERE 
                         app.prova_id = @provaId AND 
                         app.tipo IN ('2') AND 
-                        NULLIF(REGEXP_REPLACE(t.ano, '[^0-9]', '', 'g'), '')::INTEGER >= 5;";
+                        NULLIF(REGEXP_REPLACE(t.ano, '[^0-9]', '', 'g'), '')::INTEGER >= 4;";
 
                 return await conn.QueryAsync<AlunoProvaProficienciaBoletimDto>(query, new { provaId });
             }
