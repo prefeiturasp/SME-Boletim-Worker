@@ -62,5 +62,29 @@ namespace SME.SERAp.Boletim.Dados.Repositories
                 conn.Dispose();
             }
         }
+
+        public async Task<string> ObterProvaAnoOriginal(long provaId)
+        {
+            using var conn = ObterConexaoLeitura();
+            try
+            {
+                var query = @"select
+	                            pao.ano
+                            from
+	                            prova p
+                            inner join prova_ano_original pao on
+	                            pao.prova_id = p.id
+                            where
+	                            p.id = @provaId";
+
+                var resultado = await conn.QueryFirstOrDefaultAsync<string>(query, new { provaId });
+                return resultado;
+            }
+            finally
+            {
+                conn.Close();
+                conn.Dispose();
+            }
+        }
     }
 }

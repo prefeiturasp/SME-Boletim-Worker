@@ -105,5 +105,84 @@ namespace SME.SERAp.Boletim.Dados.Testes.Repositories
             var resultado = await repositorio.ObterAnoProva(1);
             Assert.Null(resultado);
         }
+
+        [Fact]
+        public async Task Deve_Obter_Prova_Ano_Original()
+        {
+            var esperado = "2023";
+
+            conexaoLeitura.SetupDapperAsync(c => c.QueryFirstOrDefaultAsync<string>(
+                It.IsAny<string>(),
+                It.IsAny<object>(),
+                null, null, null
+            )).ReturnsAsync(esperado);
+
+            var resultado = await repositorio.ObterProvaAnoOriginal(1);
+
+            Assert.NotNull(resultado);
+            Assert.Equal("2023", resultado);
+        }
+
+        [Fact]
+        public async Task Deve_Obter_Prova_Ano_Original_Nulo()
+        {
+            conexaoLeitura.SetupDapperAsync(c => c.QueryFirstOrDefaultAsync<string>(
+                It.IsAny<string>(),
+                It.IsAny<object>(),
+                null, null, null
+            )).ReturnsAsync((string)null);
+
+            var resultado = await repositorio.ObterProvaAnoOriginal(1);
+
+            Assert.Null(resultado);
+        }
+
+        [Fact]
+        public async Task Deve_Obter_Prova_Ano_Original_Com_ProvaId_Correto()
+        {
+            var esperado = "2024";
+            var provaId = 123L;
+
+            conexaoLeitura.SetupDapperAsync(c => c.QueryFirstOrDefaultAsync<string>(
+                It.IsAny<string>(),
+                It.IsAny<object>(),
+                null, null, null
+            )).ReturnsAsync(esperado);
+
+            var resultado = await repositorio.ObterProvaAnoOriginal(provaId);
+
+            Assert.NotNull(resultado);
+            Assert.Equal("2024", resultado);
+        }
+
+        [Fact]
+        public async Task Deve_Obter_Prova_Ano_Original_Com_Diferentes_ProvaIds()
+        {
+            var provaId1 = 1L;
+            var provaId2 = 2L;
+            var anoOriginal1 = "2022";
+            var anoOriginal2 = "2023";
+
+            conexaoLeitura.SetupDapperAsync(c => c.QueryFirstOrDefaultAsync<string>(
+                It.IsAny<string>(),
+                It.IsAny<object>(),
+                null, null, null
+            )).ReturnsAsync(anoOriginal1);
+
+            var resultado1 = await repositorio.ObterProvaAnoOriginal(provaId1);
+
+
+            conexaoLeitura.SetupDapperAsync(c => c.QueryFirstOrDefaultAsync<string>(
+                It.IsAny<string>(),
+                It.IsAny<object>(),
+                null, null, null
+            )).ReturnsAsync(anoOriginal2);
+
+            var resultado2 = await repositorio.ObterProvaAnoOriginal(provaId2);
+
+            Assert.NotNull(resultado1);
+            Assert.NotNull(resultado2);
+            Assert.NotEqual(resultado1, resultado2);
+        }
     }
 }
