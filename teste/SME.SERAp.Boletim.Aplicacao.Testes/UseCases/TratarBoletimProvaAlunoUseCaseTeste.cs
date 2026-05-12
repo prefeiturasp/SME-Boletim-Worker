@@ -1,10 +1,12 @@
 ﻿using MediatR;
 using Moq;
 using RabbitMQ.Client;
-using SME.SERAp.Boletim.Aplicacao.Commands.PublicaFilaRabbit;
 using SME.SERAp.Boletim.Aplicacao.Commands.PublicarFilaRabbitSerapEstudante;
 using SME.SERAp.Boletim.Aplicacao.Interfaces;
+using SME.SERAp.Boletim.Aplicacao.Queries;
 using SME.SERAp.Boletim.Aplicacao.Queries.ObterBoletimProvaAlunoPorProvaIdAlunoRaAnoEscolar;
+using SME.SERAp.Boletim.Aplicacao.Queries.ObterBoletimProvaAlunoUltimaTurmaAlunoPorAnoEscolar;
+using SME.SERAp.Boletim.Aplicacao.Queries.ObterProvaAnoOriginal;
 using SME.SERAp.Boletim.Aplicacao.Queries.ObterQuantidadeMensagensPorNomeFila;
 using SME.SERAp.Boletim.Aplicacao.UseCases;
 using SME.SERAp.Boletim.Dominio.Entities;
@@ -52,6 +54,9 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.UseCases
             mediator.Setup(m => m.Send(It.IsAny<ObterQuantidadeMensagensPorNomeFilaQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(1);
 
+            mediator.Setup(m => m.Send(It.IsAny<ObterProvaAnoOriginalQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((string)null!);
+
             var resultado = await tratarBoletimProvaAlunoUseCase.Executar(mensagemRabbit);
             Assert.True(resultado);
             mediator.Verify(x => x.Send(It.Is<InserirBoletimProvaAlunoCommand>(cmd =>
@@ -94,6 +99,9 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.UseCases
 
             mediator.Setup(m => m.Send(It.IsAny<ObterQuantidadeMensagensPorNomeFilaQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(1);
+
+            mediator.Setup(m => m.Send(It.IsAny<ObterProvaAnoOriginalQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((string)null!);
 
             var resultado = await tratarBoletimProvaAlunoUseCase.Executar(mensagemRabbit);
             Assert.True(resultado);
@@ -164,6 +172,9 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.UseCases
             mediator.Setup(m => m.Send(It.IsAny<ObterQuantidadeMensagensPorNomeFilaQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(1);
 
+            mediator.Setup(m => m.Send(It.IsAny<ObterProvaAnoOriginalQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((string)null!);
+
             var resultado = await tratarBoletimProvaAlunoUseCase.Executar(mensagemRabbit);
 
             Assert.False(resultado);
@@ -191,6 +202,9 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.UseCases
             mediator.Setup(m => m.Send(It.IsAny<ObterQuantidadeMensagensPorNomeFilaQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(0);
 
+            mediator.Setup(m => m.Send(It.IsAny<ObterProvaAnoOriginalQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((string)null!);
+
             var resultado = await tratarBoletimProvaAlunoUseCase.Executar(mensagemRabbit);
             Assert.True(resultado);
             mediator.Verify(x => x.Send(It.Is<InserirBoletimProvaAlunoCommand>(cmd =>
@@ -214,6 +228,171 @@ namespace SME.SERAp.Boletim.Aplicacao.Testes.UseCases
             mediator.Verify(m => m.Send(It.IsAny<ExcluirBoletimProvaAlunoCommand>(), It.IsAny<CancellationToken>()), Times.Exactly(boletinsProvasAlunosPorProvaIdAlunoRaAnoEscola.Count));
             mediator.Verify(m => m.Send(It.Is<PublicarFilaRabbitSerapEstudanteCommand>(cmd => cmd.NomeFila == RotasRabbit.BuscarAlunoProvaSpProficiencia), It.IsAny<CancellationToken>()), Times.Once);
             consolidarBoletimEscolarUseCase.Verify(c => c.Executar(It.IsAny<long>(), It.IsAny<int>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task Deve_Atualizar_Dados_Com_Prova_Ano_Original_Diferente_E_Boletim_Encontrado()
+        {
+            var alunoProvaProficienciaBoletimDto = ObterAlunoProvaProficienciaBoletimDto();
+            alunoProvaProficienciaBoletimDto.AnoEscolar = 5;
+            var mensagemRabbit = new MensagemRabbit(JsonSerializer.Serialize(alunoProvaProficienciaBoletimDto), Guid.NewGuid());
+
+            var boletinsProvasAlunosPorProvaIdAlunoRaAnoEscola = ObterBoletinsProvasAlunosPorProvaIdAlunoRaAnoEscola();
+            mediator.Setup(m => m.Send(It.IsAny<ObterBoletimProvaAlunoPorProvaIdAlunoRaAnoEscolarQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(boletinsProvasAlunosPorProvaIdAlunoRaAnoEscola);
+
+            mediator.Setup(m => m.Send(It.IsAny<InserirBoletimProvaAlunoCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(1);
+
+            mediator.Setup(m => m.Send(It.IsAny<ExcluirBoletimProvaAlunoCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(1);
+
+            mediator.Setup(m => m.Send(It.IsAny<ObterQuantidadeMensagensPorNomeFilaQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(1);
+
+            mediator.Setup(m => m.Send(It.IsAny<ObterProvaAnoOriginalQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync("6");
+
+            mediator.Setup(m => m.Send(It.IsAny<ObterAnoProvaQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(2024);
+
+            var boletimUltimaTurma = new BoletimProvaAlunoUltimaTurmaAlunoDto
+            {
+                CodigoDre = 999L,
+                CodigoUe = "UE999",
+                NomeUe = "Escola Updated",
+                AnoEscolar = 6,
+                Turma = "6B",
+                NivelCodigo = 4
+            };
+
+            mediator.Setup(m => m.Send(It.IsAny<ObterBoletimProvaAlunoUltimaTurmaAlunoPorAnoEscolarQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(boletimUltimaTurma);
+
+            var resultado = await tratarBoletimProvaAlunoUseCase.Executar(mensagemRabbit);
+
+            Assert.True(resultado);
+
+            mediator.Verify(x => x.Send(It.Is<InserirBoletimProvaAlunoCommand>(cmd =>
+                 cmd.BoletimProvaAluno.DreId == boletimUltimaTurma.CodigoDre &&
+                 cmd.BoletimProvaAluno.CodigoUe == boletimUltimaTurma.CodigoUe &&
+                 cmd.BoletimProvaAluno.NomeUe == boletimUltimaTurma.NomeUe &&
+                 cmd.BoletimProvaAluno.AnoEscolar == boletimUltimaTurma.AnoEscolar &&
+                 cmd.BoletimProvaAluno.Turma == boletimUltimaTurma.Turma &&
+                 cmd.BoletimProvaAluno.NivelCodigo == boletimUltimaTurma.NivelCodigo
+            ), default), Times.Once);
+
+            mediator.Verify(m => m.Send(It.IsAny<ObterProvaAnoOriginalQuery>(), It.IsAny<CancellationToken>()), Times.Once);
+            mediator.Verify(m => m.Send(It.IsAny<ObterBoletimProvaAlunoUltimaTurmaAlunoPorAnoEscolarQuery>(), It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task Deve_Usar_Ano_Atual_Quando_Ano_Prova_Nao_Encontrado()
+        {
+            var alunoProvaProficienciaBoletimDto = ObterAlunoProvaProficienciaBoletimDto();
+            alunoProvaProficienciaBoletimDto.AnoEscolar = 5;
+            var mensagemRabbit = new MensagemRabbit(JsonSerializer.Serialize(alunoProvaProficienciaBoletimDto), Guid.NewGuid());
+
+            var boletinsProvasAlunosPorProvaIdAlunoRaAnoEscola = ObterBoletinsProvasAlunosPorProvaIdAlunoRaAnoEscola();
+            mediator.Setup(m => m.Send(It.IsAny<ObterBoletimProvaAlunoPorProvaIdAlunoRaAnoEscolarQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(boletinsProvasAlunosPorProvaIdAlunoRaAnoEscola);
+
+            mediator.Setup(m => m.Send(It.IsAny<InserirBoletimProvaAlunoCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(1);
+
+            mediator.Setup(m => m.Send(It.IsAny<ExcluirBoletimProvaAlunoCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(1);
+
+            mediator.Setup(m => m.Send(It.IsAny<ObterQuantidadeMensagensPorNomeFilaQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(1);
+
+            mediator.Setup(m => m.Send(It.IsAny<ObterProvaAnoOriginalQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync("6");
+
+            mediator.Setup(m => m.Send(It.IsAny<ObterAnoProvaQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((int?)null);
+
+            var boletimUltimaTurma = new BoletimProvaAlunoUltimaTurmaAlunoDto
+            {
+                CodigoDre = 999L,
+                CodigoUe = "UE999",
+                NomeUe = "Escola",
+                AnoEscolar = 6,
+                Turma = "6B",
+                NivelCodigo = 4
+            };
+
+            mediator.Setup(m => m.Send(It.IsAny<ObterBoletimProvaAlunoUltimaTurmaAlunoPorAnoEscolarQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(boletimUltimaTurma);
+
+            var resultado = await tratarBoletimProvaAlunoUseCase.Executar(mensagemRabbit);
+
+            Assert.True(resultado);
+
+            mediator.Verify(m => m.Send(It.IsAny<ObterBoletimProvaAlunoUltimaTurmaAlunoPorAnoEscolarQuery>(), It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task Nao_Deve_Atualizar_Dados_Quando_Prova_Ano_Original_Igual_Ano_Escolar()
+        {
+            var alunoProvaProficienciaBoletimDto = ObterAlunoProvaProficienciaBoletimDto();
+            alunoProvaProficienciaBoletimDto.AnoEscolar = 5;
+            var mensagemRabbit = new MensagemRabbit(JsonSerializer.Serialize(alunoProvaProficienciaBoletimDto), Guid.NewGuid());
+
+            var boletinsProvasAlunosPorProvaIdAlunoRaAnoEscola = new List<BoletimProvaAluno>();
+            mediator.Setup(m => m.Send(It.IsAny<ObterBoletimProvaAlunoPorProvaIdAlunoRaAnoEscolarQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(boletinsProvasAlunosPorProvaIdAlunoRaAnoEscola);
+
+            mediator.Setup(m => m.Send(It.IsAny<InserirBoletimProvaAlunoCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(1);
+
+            mediator.Setup(m => m.Send(It.IsAny<ObterQuantidadeMensagensPorNomeFilaQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(1);
+
+            mediator.Setup(m => m.Send(It.IsAny<ObterProvaAnoOriginalQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync("5");
+
+            var resultado = await tratarBoletimProvaAlunoUseCase.Executar(mensagemRabbit);
+
+            Assert.True(resultado);
+
+            mediator.Verify(m => m.Send(It.IsAny<ObterBoletimProvaAlunoUltimaTurmaAlunoPorAnoEscolarQuery>(), It.IsAny<CancellationToken>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task Nao_Deve_Atualizar_Quando_Boletim_Ultima_Turma_Nulo()
+        {
+            var alunoProvaProficienciaBoletimDto = ObterAlunoProvaProficienciaBoletimDto();
+            alunoProvaProficienciaBoletimDto.AnoEscolar = 5;
+            var mensagemRabbit = new MensagemRabbit(JsonSerializer.Serialize(alunoProvaProficienciaBoletimDto), Guid.NewGuid());
+
+            var boletinsProvasAlunosPorProvaIdAlunoRaAnoEscola = ObterBoletinsProvasAlunosPorProvaIdAlunoRaAnoEscola();
+            mediator.Setup(m => m.Send(It.IsAny<ObterBoletimProvaAlunoPorProvaIdAlunoRaAnoEscolarQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(boletinsProvasAlunosPorProvaIdAlunoRaAnoEscola);
+
+            mediator.Setup(m => m.Send(It.IsAny<InserirBoletimProvaAlunoCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(1);
+
+            mediator.Setup(m => m.Send(It.IsAny<ExcluirBoletimProvaAlunoCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(1);
+
+            mediator.Setup(m => m.Send(It.IsAny<ObterQuantidadeMensagensPorNomeFilaQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(1);
+
+            mediator.Setup(m => m.Send(It.IsAny<ObterProvaAnoOriginalQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync("6");
+
+            mediator.Setup(m => m.Send(It.IsAny<ObterAnoProvaQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(2024);
+
+            mediator.Setup(m => m.Send(It.IsAny<ObterBoletimProvaAlunoUltimaTurmaAlunoPorAnoEscolarQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((BoletimProvaAlunoUltimaTurmaAlunoDto)null!);
+
+            var resultado = await tratarBoletimProvaAlunoUseCase.Executar(mensagemRabbit);
+
+            Assert.True(resultado);
+
+            mediator.Verify(m => m.Send(It.IsAny<ExcluirBoletimProvaAlunoCommand>(), It.IsAny<CancellationToken>()), Times.Exactly(boletinsProvasAlunosPorProvaIdAlunoRaAnoEscola.Count));
         }
 
         private List<BoletimProvaAluno> ObterBoletinsProvasAlunosPorProvaIdAlunoRaAnoEscola()
