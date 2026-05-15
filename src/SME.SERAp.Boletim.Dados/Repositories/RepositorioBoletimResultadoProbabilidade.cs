@@ -56,7 +56,8 @@ namespace SME.SERAp.Boletim.Dados.Repositories
                             inner join turma t on
 	                            t.ue_id = u.id and
 	                            t.nome = bpa.turma and
-	                            t.ano_letivo = EXTRACT(YEAR FROM p.inicio)
+	                            t.ano_letivo = EXTRACT(YEAR FROM p.inicio) and
+                                t.modalidade_codigo in (5)
                             where 
 	                            bpa.prova_id = @provaId
                             group by 
