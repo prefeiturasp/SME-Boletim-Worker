@@ -39,14 +39,14 @@ namespace SME.SERAp.Boletim.Dados.Repositories
                         p.disciplina as NomeDisciplina,
                         p.disciplina_id as DisciplinaId,
                         app.tipo as ProvaStatus,
-                        app.proficiencia as Proficiencia,
+                        round(app.proficiencia, 2) as Proficiencia,
                         app.erro_medida as ErroMedida,
                         COALESCE(
                             (SELECT np.NivelCodigo 
                              FROM NivelAluno np
                              WHERE np.disciplina_id = p.disciplina_id 
                                AND np.ano = NULLIF(REGEXP_REPLACE(t.ano, '[^0-9]', '', 'g'), '')::INTEGER
-                               AND (app.proficiencia < np.valor_referencia OR np.valor_referencia IS NULL)
+                               AND (round(app.proficiencia, 2) < np.valor_referencia OR np.valor_referencia IS NULL)
                              ORDER BY np.NivelCodigo ASC
                              LIMIT 1), 
                             4) AS NivelCodigo
@@ -63,7 +63,7 @@ namespace SME.SERAp.Boletim.Dados.Repositories
                         u.id = t.ue_id
                     WHERE 
                         app.prova_id = @provaId AND 
-                        app.tipo IN ('2') AND 
+                        app.tipo IN ('2') AND
                         NULLIF(REGEXP_REPLACE(t.ano, '[^0-9]', '', 'g'), '')::INTEGER >= 4;";
 
                 return await conn.QueryAsync<AlunoProvaProficienciaBoletimDto>(query, new { provaId });
