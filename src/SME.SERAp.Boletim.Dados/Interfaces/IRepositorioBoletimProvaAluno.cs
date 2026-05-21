@@ -8,5 +8,6 @@ namespace SME.SERAp.Boletim.Dados.Interfaces
         Task<int> ExcluirPorIdAsync(long id);
         Task<IEnumerable<BoletimProvaAluno>> ObterBoletimProvaAlunoPorProvaIdAlunoRaAnoEscolar(long provaId, long alunoRa, int anoEscolar);
         Task<IEnumerable<BoletimEscolarDetalhesDto>> ObterBoletinsEscolaresDetalhesPorProvaId(long provaId);
+        Task<BoletimProvaAlunoUltimaTurmaAlunoDto> ObterBoletimProvaAlunoUltimaTurmaAlunoPorAnoEscolar(long alunRa, int anoLetivo, int anoEscolar, long disciplinaId, decimal proficiencia);
     }
 }

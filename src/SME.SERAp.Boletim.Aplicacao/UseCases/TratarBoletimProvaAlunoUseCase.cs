@@ -1,13 +1,14 @@
 ﻿using MediatR;
 using RabbitMQ.Client;
-using SME.SERAp.Boletim.Aplicacao.Commands.PublicaFilaRabbit;
 using SME.SERAp.Boletim.Aplicacao.Commands.PublicarFilaRabbitSerapEstudante;
 using SME.SERAp.Boletim.Aplicacao.Interfaces;
+using SME.SERAp.Boletim.Aplicacao.Queries;
 using SME.SERAp.Boletim.Aplicacao.Queries.ObterBoletimProvaAlunoPorProvaIdAlunoRaAnoEscolar;
+using SME.SERAp.Boletim.Aplicacao.Queries.ObterBoletimProvaAlunoUltimaTurmaAlunoPorAnoEscolar;
+using SME.SERAp.Boletim.Aplicacao.Queries.ObterProvaAnoOriginal;
 using SME.SERAp.Boletim.Aplicacao.Queries.ObterQuantidadeMensagensPorNomeFila;
 using SME.SERAp.Boletim.Dominio.Entities;
 using SME.SERAp.Boletim.Infra.Dtos;
-using SME.SERAp.Boletim.Infra.EnvironmentVariables;
 using SME.SERAp.Boletim.Infra.Fila;
 using SME.SERAp.Boletim.Infra.Interfaces;
 
@@ -31,19 +32,33 @@ namespace SME.SERAp.Boletim.Aplicacao.UseCases
                 var alunoProvaProficienciaBoletimDto = mensagemRabbit.ObterObjetoMensagem<AlunoProvaProficienciaBoletimDto>();
                 if (alunoProvaProficienciaBoletimDto is null) return true;
 
-                var boletimAlunoProvaExistentes = await mediator
-                    .Send(new ObterBoletimProvaAlunoPorProvaIdAlunoRaAnoEscolarQuery(alunoProvaProficienciaBoletimDto.ProvaId,
-                        alunoProvaProficienciaBoletimDto.CodigoAluno, alunoProvaProficienciaBoletimDto.AnoEscolar));
+                await RemoverRegistrosExistentes(alunoProvaProficienciaBoletimDto);
 
-                if (boletimAlunoProvaExistentes?.Any() ?? false)
+                var provaAnoOriginal = await mediator.Send(new ObterProvaAnoOriginalQuery(alunoProvaProficienciaBoletimDto.ProvaId));
+                if (!string.IsNullOrWhiteSpace(provaAnoOriginal))
                 {
-                    foreach (var boletimAlunoProvaExistente in boletimAlunoProvaExistentes)
+                    if (int.TryParse(provaAnoOriginal, out var provaAnoEscolar) && provaAnoEscolar != alunoProvaProficienciaBoletimDto.AnoEscolar)
                     {
-                        await mediator.Send(new ExcluirBoletimProvaAlunoCommand(boletimAlunoProvaExistente.Id));
+                        var ano = (await mediator.Send(new ObterAnoProvaQuery(alunoProvaProficienciaBoletimDto.ProvaId))) ?? DateTime.Now.Year;
+                        var boletimProvaAlunoUltimaTurmaAluno = await mediator.Send(new ObterBoletimProvaAlunoUltimaTurmaAlunoPorAnoEscolarQuery(alunoProvaProficienciaBoletimDto.CodigoAluno,
+                            ano, provaAnoEscolar, alunoProvaProficienciaBoletimDto.DisciplinaId, alunoProvaProficienciaBoletimDto.Proficiencia));
+
+                        if (boletimProvaAlunoUltimaTurmaAluno != null)
+                        {
+                            alunoProvaProficienciaBoletimDto.CodigoDre = boletimProvaAlunoUltimaTurmaAluno.CodigoDre;
+                            alunoProvaProficienciaBoletimDto.CodigoUe = boletimProvaAlunoUltimaTurmaAluno.CodigoUe;
+                            alunoProvaProficienciaBoletimDto.NomeUe = boletimProvaAlunoUltimaTurmaAluno.NomeUe;
+                            alunoProvaProficienciaBoletimDto.AnoEscolar = boletimProvaAlunoUltimaTurmaAluno.AnoEscolar;
+                            alunoProvaProficienciaBoletimDto.Turma = boletimProvaAlunoUltimaTurmaAluno.Turma;
+                            alunoProvaProficienciaBoletimDto.NivelCodigo = boletimProvaAlunoUltimaTurmaAluno.NivelCodigo;
+
+                            await RemoverRegistrosExistentes(alunoProvaProficienciaBoletimDto);
+                        }
                     }
                 }
 
                 var boletimProvaAluno = ObterBoletimProvaAluno(alunoProvaProficienciaBoletimDto);
+
                 await mediator.Send(new InserirBoletimProvaAlunoCommand(boletimProvaAluno));
 
                 await BuscarAlunoProvaSpProficiencia(boletimProvaAluno);
@@ -57,6 +72,21 @@ namespace SME.SERAp.Boletim.Aplicacao.UseCases
             }
 
             return true;
+        }
+
+        private async Task RemoverRegistrosExistentes(AlunoProvaProficienciaBoletimDto alunoProvaProficienciaBoletimDto)
+        {
+            var boletimAlunoProvaExistentes = await mediator
+                                .Send(new ObterBoletimProvaAlunoPorProvaIdAlunoRaAnoEscolarQuery(alunoProvaProficienciaBoletimDto.ProvaId,
+                                    alunoProvaProficienciaBoletimDto.CodigoAluno, alunoProvaProficienciaBoletimDto.AnoEscolar));
+
+            if (boletimAlunoProvaExistentes?.Any() ?? false)
+            {
+                foreach (var boletimAlunoProvaExistente in boletimAlunoProvaExistentes)
+                {
+                    await mediator.Send(new ExcluirBoletimProvaAlunoCommand(boletimAlunoProvaExistente.Id));
+                }
+            }
         }
 
         private async Task BuscarAlunoProvaSpProficiencia(BoletimProvaAluno boletimProvaAluno)

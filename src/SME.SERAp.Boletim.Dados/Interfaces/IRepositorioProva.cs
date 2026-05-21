@@ -8,5 +8,7 @@ namespace SME.SERAp.Boletim.Dados.Interfaces
         Task<IEnumerable<ProvaDto>> ObterProvasFinalizadasPorData(DateTime data);
 
         Task<int?> ObterAnoProva(long provaId);
+
+        Task<string> ObterProvaAnoOriginal(long provaId);
     }
 }
