@@ -52,5 +52,28 @@ namespace SME.SERAp.Boletim.Dados.Repositories
                 conn.Dispose();
             }
         }
+
+        public async Task<bool> ExisteBoletimEscolarAsync(long ueId, long provaId, long? disciplinaId, string? componenteCurricular)
+        {
+            using var conn = ObterConexao();
+            try
+            {
+                var query = @"select exists (
+                      select 1
+                      from boletim_escolar
+                      where ue_id = @ueId
+                        and prova_id = @provaId
+                        and disciplina_id is not distinct from @disciplinaId
+                        and componente_curricular is not distinct from @componenteCurricular)";
+
+                return await conn.ExecuteScalarAsync<bool>(query,
+                    new { ueId, provaId, disciplinaId, componenteCurricular });
+            }
+            finally
+            {
+                conn.Close();
+                conn.Dispose();
+            }
+        }
     }
 }
