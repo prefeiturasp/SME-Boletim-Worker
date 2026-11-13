@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using RabbitMQ.Client;
 using SME.SERAp.Boletim.Aplicacao.Interfaces;
+using SME.SERAp.Boletim.Aplicacao.Queries.ExisteBoletimEscolar;
 using SME.SERAp.Boletim.Dominio.Entities;
 using SME.SERAp.Boletim.Infra.Dtos;
 using SME.SERAp.Boletim.Infra.Fila;
@@ -23,6 +24,14 @@ namespace SME.SERAp.Boletim.Aplicacao.UseCases
             {
                 var provaBoletimDetalhesDto = mensagemRabbit.ObterObjetoMensagem<BoletimEscolarDetalhesDto>();
                 if (provaBoletimDetalhesDto is null) return true;
+
+                var existe = await mediator.Send(new ExisteBoletimEscolarQuery(
+                    provaBoletimDetalhesDto.UeId,
+                    provaBoletimDetalhesDto.ProvaId,
+                    provaBoletimDetalhesDto.DisciplinaId,
+                    provaBoletimDetalhesDto.ComponenteCurricular));
+
+                if (existe) return true;
 
                 var boletimEscolar = ObterBoletimEscolar(provaBoletimDetalhesDto);
                 await mediator.Send(new InserirBoletimEscolarCommand(boletimEscolar));
